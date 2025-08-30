@@ -2,7 +2,7 @@
 import { useUser } from "@/hooks/use-user";
 import { useState } from "react";
 
-export default function Page() {
+export default function LoginPage() {
   const { login } = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
