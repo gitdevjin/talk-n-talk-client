@@ -14,7 +14,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     const base64string = btoa(`${email}:${password}`);
-    const res = await fetch(`${process.env.TNT_SERVER_URL}/auth/login/email`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/auth/login/email`, {
       method: "POST",
       headers: {
         authorization: `Basic ${base64string}`,
@@ -30,13 +30,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     localStorage.setItem("accessToken", data.accessToken);
 
-    const userRes = await fetch(`${process.env.TNT_SERVER_URL}/users/me`, {
+    const userRes = await fetch(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/me`, {
       method: "GET",
-      headers: {
-        authorization: `Bearer ${data.accessToken}`,
-      },
+      credentials: "include",
     });
-    const userObject = await userRes.json();
+
+    const userObject: User = await userRes.json();
 
     setUser(userObject);
   };
