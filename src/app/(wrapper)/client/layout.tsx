@@ -26,6 +26,19 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
 
         const user = await res.json();
         console.log(user);
+
+        const resChatRooms = await fetch(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/group`, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!resChatRooms.ok) {
+          console.log("error");
+        }
+
+        const chatRooms = await resChatRooms.json();
+        console.log(chatRooms);
+
         setUser(user);
       } catch (err) {
         console.log("failed to fetch user ", err);
@@ -39,11 +52,13 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <div>
+    <div className="h-screen bg-amber-100">
       <div>chat layout</div>
-      {/* Sidbarmust be client */}
-      {user ? <Sidebar user={user} /> : <div>loading</div>}
-      {children} {/* can be server */}
+      <div className="flex flex-row">
+        {/* Sidbarmust be client */}
+        {user ? <Sidebar user={user} /> : <div>loading</div>}
+        {children} {/* can be server */}
+      </div>
       <div>current user : {user?.email}</div>
     </div>
   );
