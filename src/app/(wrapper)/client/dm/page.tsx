@@ -1,3 +1,4 @@
+import { DirectMessage, GroupChat } from "@/types/entity-type.ts/user";
 import { cookies } from "next/headers";
 
 export default async function DmPage() {
@@ -7,6 +8,20 @@ export default async function DmPage() {
 
   const cookieList = await cookies();
   const accesstoken = cookieList.get("accessToken")?.value;
+
+  const userRes = await fetch(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/me`, {
+    method: "GET",
+    headers: {
+      cookie: `accessToken=${accesstoken}`,
+    },
+  });
+
+  if (!userRes) {
+    throw new Error("User not authenticated");
+  }
+
+  const user = await userRes.json();
+
   const res = await fetch(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/dms`, {
     method: "GET",
     headers: {
@@ -14,24 +29,34 @@ export default async function DmPage() {
     },
   });
 
-  console.log(res);
-
   if (!res.ok) {
     throw new Error("Failed to fetch DMs");
   }
 
-  const listOfDms = await res.json();
+  const listOfDms: DirectMessage[] = await res.json();
+
+  console.log(listOfDms);
+  console.log(user.id);
+
+  const friendNames = listOfDms.map((dm) => {
+    return dm.members.find((m) => m.userId !== user.id)?.user.username;
+  });
+
+  console.log("---------------");
+  console.log(friendNames);
 
   return (
-    <div className="bg-gray-300 w-full h-96 border-1 p-10">
-      <div className="p-10 m-10">DM Page 'resizable'</div>
-      {/* {listOfDms.map((dm: any) => {
-        //dm type should be defined
-        return <div>{dm.id}</div>;
-      })} */}
-      <div className="flex flex-row gap-10 p-10">
-        <div className="border-1 p-10 m-10">Left : {listOfDms.message} </div>
-        <div className="border-1 p-10 m-10">right</div>
+    <div className="bg-gray-300 w-full h-full border-1">
+      <div className="flex flex-col justify-center items-center p-10 w-full h-full">
+        <div>DM Page 'resizable'</div>
+        <div className="flex flex-row gap-10 w-full h-full">
+          <div className="border-1 w-50 p-5 h-full">
+            {friendNames.map((friend: any) => {
+              return <div key={friend}>{friend}</div>;
+            })}
+          </div>
+          <div className="border-1 p-10 w-full h-full">right</div>
+        </div>
       </div>
     </div>
   );
