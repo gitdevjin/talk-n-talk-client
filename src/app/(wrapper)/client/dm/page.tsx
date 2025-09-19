@@ -1,4 +1,4 @@
-import { DirectMessage, GroupChat } from "@/types/entity-type.ts/user";
+import { DirectMessage } from "@/types/entity-type.ts/user";
 import { cookies } from "next/headers";
 
 export default async function DmPage() {
@@ -40,11 +40,13 @@ export default async function DmPage() {
       <div className="flex flex-col justify-center items-center p-10 w-full h-full">
         <div>DM Page 'resizable'</div>
         <div className="flex flex-row gap-10 w-full h-full">
+          <div>friend menu</div>
           <div className="border-1 w-50 p-5 h-full">
             {friendNames.map((fName: any) => {
               return <div key={fName}>{fName}</div>;
             })}
           </div>
+
           <div className="border-1 p-10 w-full h-full">right</div>
         </div>
       </div>

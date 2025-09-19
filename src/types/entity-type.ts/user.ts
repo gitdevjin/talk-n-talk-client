@@ -4,6 +4,18 @@ export interface User {
   username: string;
 }
 
+export interface ChatRoom {
+  id: string;
+  roomname: string;
+  isGroup: boolean;
+  members: {
+    userId: string;
+    user: {
+      id: string;
+      username: string;
+    };
+  }[];
+}
 export interface GroupChat {
   id: string;
   roomname: string;
