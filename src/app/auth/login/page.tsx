@@ -17,7 +17,6 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      console.log("before login hook");
       await login(email, password); // context handles token + user
       console.log(user);
       router.push("/client/dm");

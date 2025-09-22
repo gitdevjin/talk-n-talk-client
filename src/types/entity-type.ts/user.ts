@@ -4,25 +4,19 @@ export interface User {
   username: string;
 }
 
-export interface ChatRoom {
+export interface Chat {
   id: string;
   roomname: string;
   isGroup: boolean;
-  members: {
-    userId: string;
-    user: {
-      id: string;
-      username: string;
-    };
-  }[];
-}
-export interface GroupChat {
-  id: string;
-  roomname: string;
 }
 
-export interface DirectMessage {
-  id: string;
+export interface GroupChat extends Chat {
+  isGroup: true;
+  // could add group-specific fields later
+}
+
+export interface DirectMessage extends Chat {
+  isGroup: false;
   members: {
     userId: string;
     user: {

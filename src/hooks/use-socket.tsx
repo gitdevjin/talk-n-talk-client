@@ -1,4 +1,5 @@
-import { ChatRoom, GroupChat } from "@/types/entity-type.ts/user";
+"use client";
+import { Chat } from "@/types/entity-type.ts/user";
 import { createContext, ReactNode, useContext, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 
@@ -8,7 +9,7 @@ interface SocketContextType {
 
 interface SocketProviderProps {
   children: ReactNode;
-  chats: ChatRoom[];
+  chats: Chat[];
 }
 
 const SocketContext = createContext<SocketContextType>({ socket: null });
@@ -18,9 +19,10 @@ export const SocketProvider = ({ children, chats }: SocketProviderProps) => {
   const joinedRef = useRef(false);
 
   useEffect(() => {
+    console.log("hello socket");
     if (socketRef.current) return;
 
-    const socket = io("http://localhost:3000", {
+    const socket = io("http://localhost:3000/chats", {
       withCredentials: true,
     });
     socketRef.current = socket;
@@ -30,6 +32,7 @@ export const SocketProvider = ({ children, chats }: SocketProviderProps) => {
 
       chats.forEach((chat) => {
         socket.emit("joinRoom", { roomId: chat.id });
+        console.log("joined!");
       });
 
       joinedRef.current = true;
