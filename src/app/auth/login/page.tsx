@@ -19,7 +19,7 @@ export default function LoginPage() {
     try {
       await login(email, password); // context handles token + user
       console.log(user);
-      router.push("/client/dm");
+      router.push("/client/dm/friend");
     } catch (err) {
       setError(`Login Failed: ${err}`);
     } finally {

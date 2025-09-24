@@ -1,4 +1,4 @@
-import { DirectMessage, GroupChat } from "@/types/entity-type.ts/user";
+import { ChatMember, DirectMessage, GroupChat } from "@/types/entity-type.ts/user";
 import { cookies } from "next/headers";
 
 export async function getGroupChats(): Promise<GroupChat[]> {
@@ -34,6 +34,30 @@ export async function getDirectMessages(): Promise<DirectMessage[]> {
 
   if (!res.ok) {
     throw new Error("Failed to fetch DirectMessages");
+  }
+
+  return res.json();
+}
+
+export async function getGroupChatMembers(roomId: string): Promise<ChatMember[]> {
+  const cookieList = await cookies();
+  const accessToken = cookieList.get("accessToken")?.value;
+
+  console.log(`roomId : ${roomId}`);
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/group/${roomId}/members`,
+    {
+      method: "GET",
+      headers: {
+        cookie: `accessToken=${accessToken}`,
+      },
+      cache: "no-store",
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch Group Chat Memebers");
   }
 
   return res.json();

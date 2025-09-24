@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div>
       Home Page
-      <Link href={"/client/dm"}>
+      <Link href={"/client/dm/friend"}>
         <div>get started</div>
       </Link>
     </div>

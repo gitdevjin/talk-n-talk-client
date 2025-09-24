@@ -25,3 +25,9 @@ export interface DirectMessage extends Chat {
     };
   }[];
 }
+
+export interface ChatMember {
+  id: string;
+  createdAt: string;
+  user: User;
+}

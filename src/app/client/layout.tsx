@@ -1,12 +1,12 @@
 import { cookies } from "next/headers";
 import { ReactNode } from "react";
-import ClientShellLayout from "../../components/ChatLayout";
+import ClientShellLayout from "../../components/Layouts/ChatLayout";
 import Sidebar from "@/components/Sidebar";
 import { SocketProvider } from "@/hooks/use-socket";
 import { getDirectMessages, getGroupChats } from "@/lib/api";
 import { Chat, DirectMessage, GroupChat } from "@/types/entity-type.ts/user";
 import { ChatProvider } from "@/hooks/use-chat";
-import ChatLayout from "../../components/ChatLayout";
+import ChatLayout from "../../components/Layouts/ChatLayout";
 
 export default async function ClientLayout({ children }: { children: ReactNode }) {
   const groupChats: GroupChat[] = await getGroupChats();

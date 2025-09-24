@@ -10,7 +10,6 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div>Home Layout</div>
         <UserProvider>{children}</UserProvider>
       </body>
     </html>
