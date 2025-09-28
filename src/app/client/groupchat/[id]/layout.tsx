@@ -9,19 +9,19 @@ import { ReactNode } from "react";
 
 interface GroupChatLayoutProps {
   children: ReactNode;
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function GroupChatLayout({ children, params }: GroupChatLayoutProps) {
-  const members = await getGroupChatMembers(params.id);
-  console.log(params.id);
+  const { id } = await params;
+  const members = await getGroupChatMembers(id);
   console.log(members);
   return (
     <TwoPaneLayout
       left={
         <div>
           {members.map((m) => (
-            <div>{m.user.username}</div>
+            <div key={m.id}>{m.user.username}</div>
           ))}
         </div>
       }

@@ -31,3 +31,12 @@ export interface ChatMember {
   createdAt: string;
   user: User;
 }
+
+export interface Message {
+  id: string;
+  roomId: string;
+  content: string;
+  senderId: string;
+  type: string;
+  createdAt: string;
+}

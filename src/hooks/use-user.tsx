@@ -11,6 +11,7 @@ interface UserContextType {
 
 const userContext = createContext<UserContextType | undefined>(undefined);
 
+// fix refresh problem,
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
