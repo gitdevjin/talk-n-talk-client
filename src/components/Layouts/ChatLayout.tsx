@@ -25,13 +25,11 @@ export default function ChatLayout({ children }: { children: ReactNode }) {
   if (!user) return null; // optional fallback; redirect happens above
 
   return (
-    <div className="h-screen bg-amber-100">
-      <div>client layout</div>
-      <div className="flex flex-row h-full w-full">
-        <div className="flex flex-row h-full w-full">
-          <Sidebar user={user} groupChats={groupChats} />
-          {children} {/* DM, chatroom/id pages */}
-        </div>
+    <div className="h-screen flex flex-col w-full">
+      <div className="flex items-center h-8 justify-center bg-blue-300">client layout</div>
+      <div className="flex flex-1 flex-row overflow-hidden">
+        <Sidebar user={user} groupChats={groupChats} />
+        {children} {/* DM, chatroom/id pages */}
       </div>
     </div>
   );

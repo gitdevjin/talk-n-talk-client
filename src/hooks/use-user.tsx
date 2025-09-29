@@ -23,7 +23,6 @@ const userContext = createContext<UserContextType | undefined>(undefined);
 // fix refresh problem,
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-
   const [loading, setLoading] = useState(true);
 
   // ✅ 1. Fetch current user when app starts
@@ -32,7 +31,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/me`, {
           method: "GET",
-          credentials: "include", // send cookies
+          credentials: "include",
         });
 
         if (res.ok) {
@@ -47,7 +46,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
           if (refreshRes.ok) {
             const data = await refreshRes.json();
-            localStorage.setItem("accessToken", data.accessToken);
+            console.log(data.accessToken); // just to check if it works fine, this code should be deleted later
 
             const newUserRes = await fetch(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/me`, {
               method: "GET",

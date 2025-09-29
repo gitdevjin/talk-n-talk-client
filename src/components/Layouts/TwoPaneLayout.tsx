@@ -43,7 +43,7 @@ export default function TwoPaneLayout({
   };
 
   return (
-    <div ref={containerRef} className="flex w-full h-full">
+    <div ref={containerRef} className="flex flex-1 w-full">
       {/* Left Pane */}
       <div className="bg-gray-100 overflow-auto" style={{ width: leftWidth }}>
         {left}
@@ -56,7 +56,7 @@ export default function TwoPaneLayout({
       />
 
       {/* Right Pane */}
-      <div className="bg-gray-100 flex-1 overflow-auto w-full">{right}</div>
+      <div className="flex flex-1 overflow-y-auto w-full bg-gray-100 ">{right}</div>
     </div>
   );
 }

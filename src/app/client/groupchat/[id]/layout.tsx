@@ -19,7 +19,7 @@ export default async function GroupChatLayout({ children, params }: GroupChatLay
   return (
     <TwoPaneLayout
       left={
-        <div>
+        <div className="bg-gray-200 h-full flex flex-col">
           <p className="text-3xl">Participants</p>
           <div>
             {members.map((m) => (

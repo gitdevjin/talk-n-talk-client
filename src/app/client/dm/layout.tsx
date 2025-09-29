@@ -33,17 +33,15 @@ export default function DmLayout({ children }: { children: ReactNode }) {
   });
 
   const left = (
-    <div className="w-full h-full">
-      <div className="flex flex-col justify-center items-center p-10 w-full h-full">
-        <div className="flex flex-row border-1 w-50 p-5 h-full">
-          {dmList.map((dm) => (
-            <Link key={dm.id} href={`/client/dm/${dm.id}`}>
-              <div className="border p-2 my-1 w-full text-center cursor-pointer hover:bg-gray-200">
-                {dm.username}
-              </div>
-            </Link>
-          ))}
-        </div>
+    <div className="flex h-full w-full bg-gray-200">
+      <div className="flex flex-col border-1 w-50 p-5 h-full">
+        {dmList.map((dm) => (
+          <Link key={dm.id} href={`/client/dm/${dm.id}`}>
+            <div className="border p-2 w-full text-center cursor-pointer hover:bg-gray-200">
+              {dm.username}
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   );

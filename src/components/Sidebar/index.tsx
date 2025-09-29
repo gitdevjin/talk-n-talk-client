@@ -8,10 +8,16 @@ import { useEffect } from "react";
 
 export default function Sidebar({ user, groupChats }: { user: User; groupChats: Chat[] }) {
   return (
-    <div className="bg-blue-300 w-40 p-4 space-y-2">
-      <div className="font-bold mb-2">Side Bar</div>
+    <div className="bg-blue-300 w-30 p-4">
+      <div className="font-bold">Side Bar</div>
       <Link href={`/client/dm/friend`}>
-        <div>dm</div>
+        <img
+          src="/icons/mail.png"
+          alt="User Avatar"
+          width={48}
+          height={48}
+          className="hover:bg-blue-400 cursor-pointer"
+        />
       </Link>
       {groupChats.map((chat) => (
         <Link key={chat.id} href={`/client/groupchat/${chat.id}`}>
@@ -19,7 +25,7 @@ export default function Sidebar({ user, groupChats }: { user: User; groupChats: 
         </Link>
       ))}
 
-      <div className="mt-4 font-semibold">{user.username}</div>
+      <div className="font-semibold">{user.username}</div>
     </div>
   );
 }

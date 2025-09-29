@@ -1,6 +1,7 @@
 "use client";
 
 import { useSocket } from "@/hooks/use-socket";
+import { fetchWithRefreshClient } from "@/lib/client-api";
 import { Message } from "@/types/entity-type.ts/user";
 import { useParams } from "next/navigation";
 import { MouseEventHandler, useEffect, useState } from "react";
@@ -12,20 +13,17 @@ export default function GroupChatPage() {
   const [loading, setLoading] = useState(true);
 
   const [newMessage, setNewMessage] = useState<string>("");
-
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/${id}/messages`, {
-          method: "GET",
-          credentials: "include", // include cookies automatically
-        });
+        const data = await fetchWithRefreshClient(
+          `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/${id}/messages`,
+          {
+            method: "GET",
+            credentials: "include", // include cookies automatically
+          }
+        );
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch messages");
-        }
-
-        const data = await res.json();
         setMessages(data);
       } catch (err) {
         console.error(err);
@@ -68,19 +66,23 @@ export default function GroupChatPage() {
   if (loading) return <div>Loading messages...</div>;
 
   return (
-    <div>
-      <h2>GroupChat Messages</h2>
-      <div>Room ID: {id}</div>
-      <div>
+    <div className="flex flex-1 flex-col">
+      {/* Header */}
+      <div className="p-4 border-b">
+        <h2>GroupChat Messages: {id}</h2>
+      </div>
+
+      {/* Messages box */}
+      <div className="flex flex-1 flex-col overflow-y-auto p-2">
         {messages.map((m) => (
-          <div key={m.id}>
+          <div key={m.id} className="mb-1">
             <strong>{m.senderId}:</strong> {m.content}
           </div>
         ))}
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t flex">
+      <div className="p-2 border-t flex h-15">
         <input
           className="flex-1 border rounded p-2 mr-2"
           value={newMessage}
