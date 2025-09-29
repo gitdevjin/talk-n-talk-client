@@ -15,14 +15,17 @@ interface GroupChatLayoutProps {
 export default async function GroupChatLayout({ children, params }: GroupChatLayoutProps) {
   const { id } = await params;
   const members = await getGroupChatMembers(id);
-  console.log(members);
+
   return (
     <TwoPaneLayout
       left={
         <div>
-          {members.map((m) => (
-            <div key={m.id}>{m.user.username}</div>
-          ))}
+          <p className="text-3xl">Participants</p>
+          <div>
+            {members.map((m) => (
+              <div key={m.id}>{m.user.username}</div>
+            ))}
+          </div>
         </div>
       }
       right={children} // [id]/page.tsx renders here

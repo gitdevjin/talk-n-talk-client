@@ -5,7 +5,7 @@ import { Message } from "@/types/entity-type.ts/user";
 import { useParams } from "next/navigation";
 import { MouseEventHandler, useEffect, useState } from "react";
 
-export default function GroupChatPage() {
+export default function DmPage() {
   const { id } = useParams<{ id: string }>();
   const { socket } = useSocket();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -69,8 +69,7 @@ export default function GroupChatPage() {
 
   return (
     <div>
-      <h2>GroupChat Messages</h2>
-      <div>Room ID: {id}</div>
+      <h2>Direct Message: {id}</h2>
       <div>
         {messages.map((m) => (
           <div key={m.id}>

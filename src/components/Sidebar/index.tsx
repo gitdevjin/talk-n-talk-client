@@ -10,7 +10,9 @@ export default function Sidebar({ user, groupChats }: { user: User; groupChats: 
   return (
     <div className="bg-blue-300 w-40 p-4 space-y-2">
       <div className="font-bold mb-2">Side Bar</div>
-
+      <Link href={`/client/dm/friend`}>
+        <div>dm</div>
+      </Link>
       {groupChats.map((chat) => (
         <Link key={chat.id} href={`/client/groupchat/${chat.id}`}>
           <div className="p-2 rounded hover:bg-blue-400 cursor-pointer">{chat.roomname}</div>

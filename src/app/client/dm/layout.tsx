@@ -2,6 +2,7 @@
 import TwoPaneLayout from "@/components/Layouts/TwoPaneLayout";
 import { useChat } from "@/hooks/use-chat";
 import { useUser } from "@/hooks/use-user";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 
@@ -25,17 +26,23 @@ export default function DmLayout({ children }: { children: ReactNode }) {
 
   if (!user) return <div>loading ...</div>; // avoid rendering content while redirecting
 
-  const friendNames = dms.map((dm) => {
-    return dm.members.find((m) => m.userId !== user.id)?.user.username;
+  // Map friend names and DM links
+  const dmList = dms.map((dm) => {
+    const friend = dm.members.find((m) => m.userId !== user.id);
+    return { id: dm.id, username: friend?.user.username || "Unknown" };
   });
 
   const left = (
     <div className="w-full h-full">
       <div className="flex flex-col justify-center items-center p-10 w-full h-full">
         <div className="flex flex-row border-1 w-50 p-5 h-full">
-          {friendNames.map((fName: any) => {
-            return <div key={fName}>{fName}</div>;
-          })}
+          {dmList.map((dm) => (
+            <Link key={dm.id} href={`/client/dm/${dm.id}`}>
+              <div className="border p-2 my-1 w-full text-center cursor-pointer hover:bg-gray-200">
+                {dm.username}
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </div>

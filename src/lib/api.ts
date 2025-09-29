@@ -1,63 +1,69 @@
 import { ChatMember, DirectMessage, GroupChat } from "@/types/entity-type.ts/user";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export async function getGroupChats(): Promise<GroupChat[]> {
-  const cookieList = await cookies();
-  const accessToken = cookieList.get("accessToken")?.value;
-
-  const res = await fetch(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/group`, {
-    method: "GET",
-    headers: {
-      cookie: `accessToken=${accessToken}`,
-    },
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch GroupChats");
-  }
-
-  return res.json();
+  return fetchWithRefresh(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/group`);
 }
 
 export async function getDirectMessages(): Promise<DirectMessage[]> {
-  const cookieList = await cookies();
-  const accessToken = cookieList.get("accessToken")?.value;
+  return fetchWithRefresh(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/dms`);
+}
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/dms`, {
-    method: "GET",
+export async function getGroupChatMembers(roomId: string): Promise<ChatMember[]> {
+  return fetchWithRefresh(
+    `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/group/${roomId}/members`
+  );
+}
+
+async function fetchWithRefresh(url: string, options: RequestInit = {}) {
+  const cookieList = await cookies();
+  let accessToken = cookieList.get("accessToken")?.value;
+
+  // initial request
+  let res = await fetch(url, {
+    ...options,
     headers: {
+      ...(options.headers || {}),
       cookie: `accessToken=${accessToken}`,
     },
     cache: "no-store",
   });
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch DirectMessages");
-  }
-
-  return res.json();
-}
-
-export async function getGroupChatMembers(roomId: string): Promise<ChatMember[]> {
-  const cookieList = await cookies();
-  const accessToken = cookieList.get("accessToken")?.value;
-
-  console.log(`roomId : ${roomId}`);
-
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/group/${roomId}/members`,
-    {
-      method: "GET",
+  // if accessToken expired
+  if (res.status === 401) {
+    // call refresh endpoint
+    const refreshRes = await fetch(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/auth/refresh`, {
+      method: "POST",
       headers: {
+        cookie: `refreshToken=${cookieList.get("refreshToken")?.value}`,
+      },
+      cache: "no-store",
+    });
+
+    console.log("refrehsed!!");
+
+    if (!refreshRes.ok) {
+      // Redirect user to login page
+      redirect("/auth/login");
+    }
+
+    const data = await refreshRes.json();
+    accessToken = data.accessToken;
+
+    // retry original request with new accessToken
+    res = await fetch(url, {
+      ...options,
+      headers: {
+        ...(options.headers || {}),
         cookie: `accessToken=${accessToken}`,
       },
       cache: "no-store",
-    }
-  );
+    });
+  }
 
   if (!res.ok) {
-    throw new Error("Failed to fetch Group Chat Memebers");
+    throw new Error(`Failed to fetch: ${res.statusText}`);
   }
 
   return res.json();
