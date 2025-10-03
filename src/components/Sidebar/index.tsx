@@ -1,10 +1,7 @@
 "use client";
 
-import { useUser } from "@/hooks/use-user";
 import { Chat, User } from "@/types/entity-type.ts/user";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function Sidebar({ user, groupChats }: { user: User; groupChats: Chat[] }) {
   return (

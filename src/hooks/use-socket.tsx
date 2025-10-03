@@ -63,10 +63,10 @@ export const SocketProvider = ({ children, chats }: SocketProviderProps) => {
         if (res.ok) {
           window.location.reload(); // token refreshed, reconnect
         } else {
-          window.location.href = "/login";
+          window.location.href = "/auth/login";
         }
       } catch {
-        window.location.href = "/login";
+        window.location.href = "/auth/login";
       }
     });
 
