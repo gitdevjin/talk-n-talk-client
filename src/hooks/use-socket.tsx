@@ -1,16 +1,8 @@
 "use client";
 import { Chat } from "@/types/entity-type.ts/user";
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
+import { useUser } from "./use-user";
 
 interface SocketContextType {
   socket: Socket | null;
@@ -37,6 +29,7 @@ const SocketContext = createContext<SocketContextType>({
 });
 
 export const SocketProvider = ({ children, chats }: SocketProviderProps) => {
+  const { user } = useUser();
   const [socket, setSocket] = useState<Socket | null>(null);
   const joinedRoomsRef = useRef<string[]>([]);
   const [unreads, setUnreads] = useState<Record<string, number>>({});

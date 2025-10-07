@@ -1,7 +1,4 @@
-import { cookies } from "next/headers";
 import { ReactNode } from "react";
-import ClientShellLayout from "../../components/Layouts/ChatLayout";
-import Sidebar from "@/components/Sidebar";
 import { SocketProvider } from "@/hooks/use-socket";
 import { getDirectMessages, getGroupChats } from "@/lib/api";
 import { Chat, DirectMessage, GroupChat } from "@/types/entity-type.ts/user";

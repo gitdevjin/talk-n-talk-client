@@ -57,6 +57,9 @@ export default function GroupChatPage() {
 
   const sendMessage = () => {
     console.log(socket);
+    console.log(id);
+    console.log(newMessage);
+
     if (!socket) return;
 
     socket.emit("sendMessage", { roomId: id, content: newMessage });

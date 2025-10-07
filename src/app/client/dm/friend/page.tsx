@@ -1,19 +1,10 @@
-"use client";
-import { useUser } from "@/hooks/use-user";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import FriendList from "@/components/Friend/FriendList";
 
-export default function FriendPage() {
-  const { user } = useUser();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!user) {
-      router.replace("/auth/login"); // redirect
-    }
-  }, [user, router]);
-
-  console.log(user);
-
-  return <div>friend page</div>;
+export default async function FriendPage() {
+  return (
+    <div>
+      <div>friend page</div>
+      <FriendList></FriendList>
+    </div>
+  );
 }
