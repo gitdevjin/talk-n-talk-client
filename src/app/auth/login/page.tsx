@@ -1,5 +1,6 @@
 "use client";
 import { useUser } from "@/hooks/use-user";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -60,7 +61,9 @@ export default function LoginPage() {
             {loading ? "Logging in..." : "Login"}
           </button>
 
-          <div className="flex justify-center">Register here if your not member</div>
+          <Link href="/auth/register">
+            <div className="flex justify-center">Register here if you are not member</div>
+          </Link>
         </form>
       </div>
     </div>

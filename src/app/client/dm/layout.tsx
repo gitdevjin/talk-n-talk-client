@@ -16,13 +16,6 @@ import { ReactNode, useEffect } from "react";
 export default function DmLayout({ children }: { children: ReactNode }) {
   const { user } = useUser();
   const { dms } = useChat();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!user) {
-      router.replace("/auth/login"); // redirect, probably it should change the logic to check cookie
-    }
-  }, [user, router]);
 
   if (!user) return <div>loading ...</div>; // avoid rendering content while redirecting
 

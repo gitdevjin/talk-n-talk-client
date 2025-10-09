@@ -36,51 +36,58 @@ export const SocketProvider = ({ children, chats }: SocketProviderProps) => {
 
   // Initialize socket
   useEffect(() => {
-    const newSocket = io("http://localhost:3000/chats", { withCredentials: true });
+    const timer = setTimeout(() => {
+      const newSocket = io("http://localhost:3000/chats", {
+        withCredentials: true,
+      });
 
-    newSocket.on("connect", () => {
-      console.log("Socket connected with id:", newSocket.id);
-      setSocket(newSocket);
-    });
+      newSocket.on("connect", () => {
+        console.log("Socket connected with id:", newSocket.id);
 
-    newSocket.on("receiveMessage", (msg: SocketMessage) => {
-      setUnreads((prev) => ({
-        ...prev,
-        [msg.roomId]: (prev[msg.roomId] || 0) + 1,
-      }));
-    });
+        chats.forEach((chat) => {
+          if (!joinedRoomsRef.current.includes(chat.id)) {
+            newSocket.emit("joinRoom", { roomId: chat.id });
+            joinedRoomsRef.current.push(chat.id);
+            console.log("📦 Joined room:", chat.id);
+          }
+        });
 
-    newSocket.on("authError", async () => {
-      try {
-        const res = await fetch("/api/auth/refresh", { method: "POST", credentials: "include" });
-        if (res.ok) {
-          window.location.reload(); // token refreshed, reconnect
-        } else {
-          window.location.href = "/auth/login";
-        }
-      } catch {
-        window.location.href = "/auth/login";
-      }
-    });
+        setSocket(newSocket);
+      });
 
-    return () => {
-      newSocket.disconnect();
-      setSocket(null);
-      joinedRoomsRef.current = [];
-    };
+      newSocket.on("receiveMessage", (msg: SocketMessage) => {
+        setUnreads((prev) => ({
+          ...prev,
+          [msg.roomId]: (prev[msg.roomId] || 0) + 1,
+        }));
+      });
+
+      // optional: listen for connection errors
+      newSocket.on("connect_error", (err) => {
+        console.error("❌ Socket connection error:", err.message);
+      });
+
+      return () => {
+        newSocket.disconnect();
+        setSocket(null);
+        joinedRoomsRef.current = [];
+      };
+    }, 400); // 200ms is usually enough
+
+    // newSocket.on("authError", async () => {
+    //   try {
+    //     const res = await fetch("/api/auth/refresh", { method: "POST", credentials: "include" });
+    //     if (res.ok) {
+    //       window.location.reload(); // token refreshed, reconnect
+    //     } else {
+    //       window.location.href = "/auth/login";
+    //     }
+    //   } catch {
+    //     window.location.href = "/auth/login";
+    //   }
+    // });
+    return () => clearTimeout(timer);
   }, []);
-
-  useEffect(() => {
-    if (!socket) return;
-
-    chats.forEach((chat) => {
-      if (!joinedRoomsRef.current.includes(chat.id)) {
-        socket.emit("joinRoom", { roomId: chat.id });
-        joinedRoomsRef.current.push(chat.id);
-        console.log("Joined room:", chat.id);
-      }
-    });
-  }, [chats, socket]);
 
   // Reset unread count for a room
   const resetUnread = (roomId: string) => {

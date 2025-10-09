@@ -15,6 +15,8 @@ interface UserContextType {
   user: User | null;
   setUser: Dispatch<SetStateAction<User | null>>;
   login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  register: (email: string, password: string, username: string) => Promise<void>;
   loading: boolean;
 }
 
@@ -74,6 +76,21 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     fetchUser();
   }, []);
 
+  const register = async (email: string, password: string, username: string) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/auth/register/email`, {
+      method: "POST",
+      credentials: "include",
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message);
+    }
+
+    setUser(data);
+  };
+
   const login = async (email: string, password: string) => {
     const base64string = btoa(`${email}:${password}`);
     const res = await fetch(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/auth/login/email`, {
@@ -90,8 +107,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       throw new Error(data.message);
     }
 
-    localStorage.setItem("accessToken", data.accessToken);
-
     const userRes = await fetch(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/me`, {
       method: "GET",
       credentials: "include",
@@ -102,8 +117,23 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     setUser(userObject);
   };
 
+  const logout = async () => {
+    try {
+      await fetch("http://localhost:3000/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      setUser(null);
+
+      window.location.href = "/";
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+
   return (
-    <userContext.Provider value={{ user, setUser, login, loading }}>
+    <userContext.Provider value={{ user, setUser, login, logout, register, loading }}>
       {children}
     </userContext.Provider>
   );
