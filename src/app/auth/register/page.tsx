@@ -19,7 +19,7 @@ export default function RegisterPage() {
     setError(null);
 
     try {
-      await register(username, email, password); // register handles API + token
+      await register(email, password, username); // register handles API + token
       router.push("/client/dm/friend"); // redirect after signup
     } catch (err) {
       setError(`Registration Failed: ${err}`);

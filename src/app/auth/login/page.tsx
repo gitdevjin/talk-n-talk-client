@@ -61,9 +61,16 @@ export default function LoginPage() {
             {loading ? "Logging in..." : "Login"}
           </button>
 
-          <Link href="/auth/register">
-            <div className="flex justify-center">Register here if you are not member</div>
-          </Link>
+          <div className="flex justify-center text-sm">
+            Don't have an account Yet?{" "}
+            <button
+              type="button"
+              onClick={() => router.push("/auth/register")}
+              className="text-green-700 hover:underline ml-1 hover:cursor-pointer"
+            >
+              Register here
+            </button>
+          </div>
         </form>
       </div>
     </div>

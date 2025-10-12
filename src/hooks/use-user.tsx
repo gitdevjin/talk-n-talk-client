@@ -77,9 +77,18 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const register = async (email: string, password: string, username: string) => {
+    console.log(email, password, username);
     const res = await fetch(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/auth/register/email`, {
       method: "POST",
       credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+        username,
+      }),
     });
 
     const data = await res.json();
