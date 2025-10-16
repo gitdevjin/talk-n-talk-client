@@ -1,14 +1,12 @@
 "use client";
 
 import Sidebar from "@/components/Sidebar";
-import { useChat } from "@/hooks/use-chat";
 import { useUser } from "@/hooks/use-user";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 
 export default function ChatLayout({ children }: { children: ReactNode }) {
   const { user, loading } = useUser(); // use loading state from provider
-  const { groupChats } = useChat();
   const router = useRouter();
 
   // 🔒 Redirect to login if user is not authenticated
@@ -28,7 +26,7 @@ export default function ChatLayout({ children }: { children: ReactNode }) {
     <div className="h-screen flex flex-col w-full">
       <div className="flex items-center h-8 justify-center bg-blue-300">client layout</div>
       <div className="flex flex-1 flex-row overflow-hidden">
-        <Sidebar groupChats={groupChats} />
+        <Sidebar />
         {children} {/* DM, chatroom/id pages */}
       </div>
     </div>

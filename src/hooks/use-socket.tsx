@@ -67,25 +67,26 @@ export const SocketProvider = ({ children, chats }: SocketProviderProps) => {
         console.error("❌ Socket connection error:", err.message);
       });
 
+      newSocket.on("authError", async () => {
+        try {
+          const res = await fetch("/api/auth/refresh", { method: "POST", credentials: "include" });
+          if (res.ok) {
+            window.location.reload(); // token refreshed, reconnect
+          } else {
+            window.location.href = "/auth/login";
+          }
+        } catch {
+          window.location.href = "/auth/login";
+        }
+      });
+
       return () => {
         newSocket.disconnect();
         setSocket(null);
         joinedRoomsRef.current = [];
       };
-    }, 400); // 200ms is usually enough
+    }, 500); // 200ms is usually enough
 
-    // newSocket.on("authError", async () => {
-    //   try {
-    //     const res = await fetch("/api/auth/refresh", { method: "POST", credentials: "include" });
-    //     if (res.ok) {
-    //       window.location.reload(); // token refreshed, reconnect
-    //     } else {
-    //       window.location.href = "/auth/login";
-    //     }
-    //   } catch {
-    //     window.location.href = "/auth/login";
-    //   }
-    // });
     return () => clearTimeout(timer);
   }, []);
 
