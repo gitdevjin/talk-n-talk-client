@@ -2,8 +2,7 @@ import FriendList from "@/components/Friend/FriendList";
 
 export default async function FriendPage() {
   return (
-    <div>
-      <div>friend page</div>
+    <div className="w-full">
       <FriendList></FriendList>
     </div>
   );

@@ -3,6 +3,12 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --color-darkgrey: #2d3748;
+  --color-darkblue: #90cdf4;
+  --color-skyblue-1: #3182ce;
+  --color-darkgrey-1: #4a5568;
+  --color-darkgrey-2: #a0aec0;
+  --color-darkgrey-3: #cbd5e0;
 }
 
 html,

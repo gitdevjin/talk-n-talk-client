@@ -26,18 +26,44 @@ export default function DmLayout({ children }: { children: ReactNode }) {
   });
 
   const left = (
-    <div className="flex h-full w-full bg-gray-200">
-      <div className="flex flex-col border-1 w-50 p-5 h-full">
-        <Link href={`/client/dm/friend`}>
-          <div>friends</div>
+    <div className="flex flex-col h-full w-full bg-[var(--color-darkgrey-1)] text-gray-200 border-r border-[var(--color-darkgrey)]">
+      {/* --- Header/Menu Section --- */}
+      <div className="flex flex-col gap-2 p-3 border-b border-[var(--color-darkgrey)]">
+        <div className="font-bold text-lg text-white mb-2">Direct Messages</div>
+
+        <Link
+          href={`/client/dm/friend`}
+          className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[var(--color-darkgrey)] transition"
+        >
+          <img className="m-1" src="/icons/friends.png" alt="Friends" width={22} height={22} />
+          <span className="text-sm">Friends</span>
         </Link>
-        {dmList.map((dm) => (
-          <Link key={dm.id} href={`/client/dm/${dm.id}`}>
-            <div className="border p-2 w-full text-center cursor-pointer hover:bg-gray-200">
-              {dm.username}
-            </div>
-          </Link>
-        ))}
+
+        <Link
+          href={`/client/dm/add`}
+          className="flex items-center gap-2 px-3 py-1 rounded-md hover:bg-[var(--color-darkgrey)] transition"
+        >
+          <span className="text-xl font-bold m-1 px-1 text-green-400">+</span>
+          <span className="text-sm">Add Friend</span>
+        </Link>
+      </div>
+
+      {/* --- DM List Section --- */}
+      <div className="flex-1 overflow-y-auto p-2">
+        {dmList.length === 0 ? (
+          <div className="text-sm text-gray-400 text-center mt-4">No DMs yet</div>
+        ) : (
+          dmList.map((dm) => (
+            <Link key={dm.id} href={`/client/dm/${dm.id}`}>
+              <div className="flex items-center px-3 py-2 rounded-md hover:bg-[var(--color-darkgrey)] cursor-pointer transition">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center text-sm font-semibold uppercase">
+                  {dm.username[0]}
+                </div>
+                <span className="ml-3 truncate text-sm">{dm.username}</span>
+              </div>
+            </Link>
+          ))
+        )}
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ interface SocketContextType {
   socket: Socket | null;
   unreads: Record<string, number>;
   resetUnread: (roomId: string) => void;
+  joinRoom: (roomId: string) => void;
 }
 
 interface SocketProviderProps {
@@ -26,6 +27,7 @@ const SocketContext = createContext<SocketContextType>({
   socket: null,
   unreads: {},
   resetUnread: () => {},
+  joinRoom: () => {},
 });
 
 export const SocketProvider = ({ children, chats }: SocketProviderProps) => {
@@ -98,8 +100,17 @@ export const SocketProvider = ({ children, chats }: SocketProviderProps) => {
     }));
   };
 
+  const joinRoom = (roomId: string) => {
+    if (!socket) return;
+    if (!joinedRoomsRef.current.includes(roomId)) {
+      socket.emit("joinRoom", { roomId });
+      joinedRoomsRef.current.push(roomId);
+      console.log("✅ Joined new room dynamically:", roomId);
+    }
+  };
+
   return (
-    <SocketContext.Provider value={{ socket, unreads, resetUnread }}>
+    <SocketContext.Provider value={{ socket, unreads, resetUnread, joinRoom }}>
       {children}
     </SocketContext.Provider>
   );

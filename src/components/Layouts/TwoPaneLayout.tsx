@@ -51,12 +51,12 @@ export default function TwoPaneLayout({
 
       {/* Divider */}
       <div
-        className="w-1 cursor-col-resize bg-gray-100 hover:bg-gray-500"
+        className="w-1 cursor-col-resize bg-[var(--color-darkgrey-2)] hover:bg-gray-500"
         onMouseDown={startDrag}
       />
 
       {/* Right Pane */}
-      <div className="flex flex-1 overflow-y-auto w-full bg-gray-100 ">{right}</div>
+      <div className="flex flex-1 overflow-y-auto w-full bg-[var(--color-darkgrey-2)]">{right}</div>
     </div>
   );
 }

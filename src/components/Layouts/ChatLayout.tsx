@@ -24,7 +24,9 @@ export default function ChatLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="h-screen flex flex-col w-full">
-      <div className="flex items-center h-8 justify-center bg-blue-300">client layout</div>
+      <div className="flex items-center h-8 justify-center bg-[var(--color-darkgrey)] text-white">
+        Talk and Talk
+      </div>
       <div className="flex flex-1 flex-row overflow-hidden">
         <Sidebar />
         {children} {/* DM, chatroom/id pages */}
