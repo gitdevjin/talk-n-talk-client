@@ -39,4 +39,5 @@ export interface Message {
   senderId: string;
   type: string;
   createdAt: string;
+  sender: User;
 }

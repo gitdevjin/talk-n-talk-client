@@ -1,10 +1,11 @@
 "use client";
+import AddFriendModal from "@/components/Friend/AddFriendModal";
 import TwoPaneLayout from "@/components/Layouts/TwoPaneLayout";
 import { useChat } from "@/hooks/use-chat";
 import { useUser } from "@/hooks/use-user";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 // to-do`s in this page
 // make this page as layout
@@ -16,6 +17,7 @@ import { ReactNode, useEffect } from "react";
 export default function DmLayout({ children }: { children: ReactNode }) {
   const { user } = useUser();
   const { dms } = useChat();
+  const [showModal, setShowModal] = useState(false);
 
   if (!user) return <div>loading ...</div>; // avoid rendering content while redirecting
 
@@ -39,13 +41,13 @@ export default function DmLayout({ children }: { children: ReactNode }) {
           <span className="text-sm">Friends</span>
         </Link>
 
-        <Link
-          href={`/client/dm/add`}
-          className="flex items-center gap-2 px-3 py-1 rounded-md hover:bg-[var(--color-darkgrey)] transition"
+        <button
+          className="flex items-center gap-2 px-3 py-1 rounded-md hover:bg-[var(--color-darkgrey)] transition hover:cursor-pointer"
+          onClick={() => setShowModal(true)}
         >
           <span className="text-xl font-bold m-1 px-1 text-green-400">+</span>
           <span className="text-sm">Add Friend</span>
-        </Link>
+        </button>
       </div>
 
       {/* --- DM List Section --- */}
@@ -65,6 +67,9 @@ export default function DmLayout({ children }: { children: ReactNode }) {
           ))
         )}
       </div>
+
+      {/* Modal */}
+      <AddFriendModal isOpen={showModal} onClose={() => setShowModal(false)}></AddFriendModal>
     </div>
   );
 

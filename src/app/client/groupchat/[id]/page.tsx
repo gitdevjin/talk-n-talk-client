@@ -24,6 +24,8 @@ export default function GroupChatPage() {
           }
         );
 
+        console.log(data);
+
         setMessages(data);
       } catch (err) {
         console.error(err);
@@ -91,13 +93,15 @@ export default function GroupChatPage() {
                 <>
                   {/* Avatar */}
                   <div className="w-8 h-8 bg-gray-500 rounded-full flex items-center justify-center text-white font-semibold flex-shrink-0">
-                    {m.senderId[0].toUpperCase()}
+                    {m.sender.username[0].toUpperCase()}
                   </div>
 
                   {/* Message content */}
                   <div className="flex flex-col">
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold text-gray-50 text-md">{m.senderId}</span>
+                      <span className="font-semibold text-blue-900 text-lg">
+                        {m.sender.username}
+                      </span>
                       <span className="text-gray-200 text-xs">
                         {new Date(m.createdAt).toLocaleTimeString([], {
                           hour: "2-digit",
