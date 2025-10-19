@@ -1,3 +1,4 @@
+import { fetchWithRefreshClient } from "@/lib/client-api";
 import { useState } from "react";
 
 interface AddFriendModalProps {
@@ -5,9 +6,15 @@ interface AddFriendModalProps {
   onClose: () => void;
 }
 
+interface SearchResult {
+  id: string;
+  username: string;
+  status: string;
+}
+
 export default function AddFriendModal({ isOpen, onClose }: AddFriendModalProps) {
   const [search, setSearch] = useState("");
-  const [results, setResults] = useState<{ id: string; username: string }[]>([]);
+  const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [searching, setSearching] = useState(false);
   const [sentRequests, setSentRequests] = useState<string[]>([]);
@@ -20,9 +27,17 @@ export default function AddFriendModal({ isOpen, onClose }: AddFriendModalProps)
     setSearching(true);
 
     try {
-      // example API endpoint — change as needed
-      const res = await fetch(`/api/users/search?username=${search}`);
-      const data = await res.json();
+      const data: SearchResult[] = await fetchWithRefreshClient(
+        `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/search?username=${search}`
+      );
+
+      console.log(data);
+
+      const alreadySent = data
+        .filter((u) => ["pending", "accepted"].includes(u.status))
+        .map((u) => u.id);
+
+      setSentRequests(alreadySent);
       setResults(data);
     } catch (err) {
       console.error(err);
@@ -35,14 +50,18 @@ export default function AddFriendModal({ isOpen, onClose }: AddFriendModalProps)
   const handleAddFriend = async (userId: string) => {
     setLoading(true);
     try {
-      await fetch(`/api/friends/request`, {
+      await fetchWithRefreshClient(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/friends`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId }),
       });
+
       setSentRequests((prev) => [...prev, userId]);
+
+      // Optionally update the result UI to reflect pending status
+      setResults((prev) => prev.map((u) => (u.id === userId ? { ...u, status: "pending" } : u)));
     } catch (err) {
-      console.error(err);
+      console.error("Add friend failed:", err);
     } finally {
       setLoading(false);
     }
@@ -74,26 +93,40 @@ export default function AddFriendModal({ isOpen, onClose }: AddFriendModalProps)
         {/* Results */}
         <div className="max-h-52 overflow-y-auto no-scrollbar">
           {results.length > 0 ? (
-            results.map((user) => (
-              <div
-                key={user.id}
-                className="flex justify-between items-center py-2 px-2 bg-[var(--color-darkgrey-3)] rounded-lg mb-2"
-              >
-                <span className="text-white text-sm">{user.username}</span>
+            results.map((user) => {
+              const status = user.status;
+              const isSent = sentRequests.includes(user.id);
 
-                {sentRequests.includes(user.id) ? (
-                  <span className="text-gray-400 text-xs italic">Request Sent</span>
-                ) : (
-                  <button
-                    onClick={() => handleAddFriend(user.id)}
-                    disabled={loading}
-                    className="px-3 py-1 rounded-md text-sm bg-blue-600 hover:bg-blue-500 text-white disabled:opacity-50"
-                  >
-                    {loading ? "..." : "Add"}
-                  </button>
-                )}
-              </div>
-            ))
+              return (
+                <div
+                  key={user.id}
+                  className="flex justify-between items-center py-2 px-2 bg-[var(--color-darkgrey-2)] rounded-lg mb-2"
+                >
+                  <span className="text-gray-800 text-md">{user.username}</span>
+
+                  {/* Button logic */}
+                  {status === "none" || status === "declined" ? (
+                    <button
+                      onClick={() => handleAddFriend(user.id)}
+                      disabled={loading}
+                      className="px-3 py-1 rounded-md text-sm bg-blue-600 hover:bg-blue-500 text-gray-200 disabled:opacity-50"
+                    >
+                      {loading ? "..." : "Add"}
+                    </button>
+                  ) : status === "pending" ? (
+                    <span className="text-gray-400 text-sm italic">Request Sent</span>
+                  ) : status === "accepted" ? (
+                    <span className="text-green-700 text-sm italic">Friends</span>
+                  ) : status === "blocked" ? (
+                    <span className="text-red-400 text-sm italic">Blocked</span>
+                  ) : (
+                    <span className="text-gray-400 text-sm italic">
+                      {isSent ? "Request Sent" : ""}
+                    </span>
+                  )}
+                </div>
+              );
+            })
           ) : (
             <p className="text-gray-400 text-sm text-center">
               {searching ? "Searching..." : "No users found"}
