@@ -17,7 +17,6 @@ export default function AddFriendModal({ isOpen, onClose }: AddFriendModalProps)
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [searching, setSearching] = useState(false);
-  const [sentRequests, setSentRequests] = useState<string[]>([]);
 
   if (!isOpen) return null;
 
@@ -33,11 +32,6 @@ export default function AddFriendModal({ isOpen, onClose }: AddFriendModalProps)
 
       console.log(data);
 
-      const alreadySent = data
-        .filter((u) => ["pending", "accepted"].includes(u.status))
-        .map((u) => u.id);
-
-      setSentRequests(alreadySent);
       setResults(data);
     } catch (err) {
       console.error(err);
@@ -56,9 +50,7 @@ export default function AddFriendModal({ isOpen, onClose }: AddFriendModalProps)
         body: JSON.stringify({ userId }),
       });
 
-      setSentRequests((prev) => [...prev, userId]);
-
-      // Optionally update the result UI to reflect pending status
+      // update the result UI to reflect pending status
       setResults((prev) => prev.map((u) => (u.id === userId ? { ...u, status: "pending" } : u)));
     } catch (err) {
       console.error("Add friend failed:", err);
@@ -95,7 +87,6 @@ export default function AddFriendModal({ isOpen, onClose }: AddFriendModalProps)
           {results.length > 0 ? (
             results.map((user) => {
               const status = user.status;
-              const isSent = sentRequests.includes(user.id);
 
               return (
                 <div
@@ -109,7 +100,7 @@ export default function AddFriendModal({ isOpen, onClose }: AddFriendModalProps)
                     <button
                       onClick={() => handleAddFriend(user.id)}
                       disabled={loading}
-                      className="px-3 py-1 rounded-md text-sm bg-blue-600 hover:bg-blue-500 text-gray-200 disabled:opacity-50"
+                      className="px-3 py-1 rounded-md text-sm bg-blue-600 hover:bg-blue-500 hover:cursor-pointer text-gray-200 disabled:opacity-50"
                     >
                       {loading ? "..." : "Add"}
                     </button>
@@ -120,9 +111,7 @@ export default function AddFriendModal({ isOpen, onClose }: AddFriendModalProps)
                   ) : status === "blocked" ? (
                     <span className="text-red-400 text-sm italic">Blocked</span>
                   ) : (
-                    <span className="text-gray-400 text-sm italic">
-                      {isSent ? "Request Sent" : ""}
-                    </span>
+                    <div>Error</div>
                   )}
                 </div>
               );
