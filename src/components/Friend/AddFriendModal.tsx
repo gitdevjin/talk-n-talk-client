@@ -47,7 +47,7 @@ export default function AddFriendModal({ isOpen, onClose }: AddFriendModalProps)
       await fetchWithRefreshClient(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/friends`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId }),
+        body: JSON.stringify({ friendId: userId }),
       });
 
       // update the result UI to reflect pending status
