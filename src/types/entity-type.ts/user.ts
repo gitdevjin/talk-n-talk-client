@@ -36,8 +36,8 @@ export interface Message {
   id: string;
   roomId: string;
   content: string;
-  senderId: string;
+  senderId: string | null;
   type: string;
   createdAt: string;
-  sender: User;
+  sender: User | null;
 }
