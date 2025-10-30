@@ -1,6 +1,8 @@
 "use client";
-import { DirectMessage, GroupChat } from "@/types/entity-type.ts/user";
-import { createContext, ReactNode, useContext, useState } from "react";
+import { DirectMessage, GroupChat, User } from "@/types/entity-type.ts/user";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { useSocket } from "./use-socket";
+import { fetchWithRefreshClient } from "@/lib/client-api";
 
 interface ChatContextType {
   dms: DirectMessage[];
@@ -18,9 +20,33 @@ interface ChatProviderProps {
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
 export const ChatProvider = ({ children, initialDms, initialGroupChats }: ChatProviderProps) => {
+  const { socket, joinRoom } = useSocket();
   const [dms, setDms] = useState(initialDms);
   const [groupChats, setGroupChats] = useState(initialGroupChats);
 
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleInvite = async ({ roomId, inviter }: { roomId: string; inviter: User }) => {
+      console.log(`Invited to ${roomId} by ${inviter}`);
+      const groupChats = await fetchWithRefreshClient(
+        `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      setGroupChats(groupChats);
+      joinRoom(roomId);
+    };
+
+    socket.on("chatroom:invited", handleInvite);
+
+    // ✅ wrap in arrow so return type is void
+    return () => {
+      socket.off("chatroom:invited", handleInvite);
+    };
+  }, [socket]);
   return (
     <ChatContext.Provider value={{ dms, setDms, groupChats, setGroupChats }}>
       {children}
