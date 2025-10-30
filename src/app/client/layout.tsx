@@ -12,11 +12,11 @@ export default async function ClientLayout({ children }: { children: ReactNode }
 
   return (
     <div>
-      <SocketProvider chats={chats}>
-        <ChatProvider initialDms={dms} initialGroupChats={groupChats}>
+      <ChatProvider initialDms={dms} initialGroupChats={groupChats}>
+        <SocketProvider chats={chats}>
           <ChatLayout>{children}</ChatLayout>
-        </ChatProvider>
-      </SocketProvider>
+        </SocketProvider>
+      </ChatProvider>
     </div>
   );
 }
