@@ -24,8 +24,6 @@ export default function GroupChatPage() {
           }
         );
 
-        console.log(data);
-
         setMessages(data);
       } catch (err) {
         console.error(err);
@@ -70,7 +68,7 @@ export default function GroupChatPage() {
   if (loading) return <div>Loading messages...</div>;
 
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col justify-between">
       {/* Header */}
       <div className="p-4 border-b">
         <h2>

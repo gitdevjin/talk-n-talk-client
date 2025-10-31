@@ -36,6 +36,7 @@ export const ChatProvider = ({ children, initialDms, initialGroupChats }: ChatPr
           credentials: "include",
         }
       );
+
       setGroupChats(groupChats);
       joinRoom(roomId);
     };

@@ -27,8 +27,12 @@ export default function InviteFriendModal({ isOpen, onClose, chatId }: InviteFri
     const fetchFriends = async () => {
       try {
         const data = await fetchWithRefreshClient(
-          `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/friends?chatId=${chatId}`
+          `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/invite/${chatId}/members`
         );
+
+        console.log(chatId);
+
+        console.log(data);
         // Server can mark which friends are already in the chat or invited
         setFriends(data);
       } catch (err) {
@@ -46,7 +50,7 @@ export default function InviteFriendModal({ isOpen, onClose, chatId }: InviteFri
     setInviting(friendId);
     try {
       await fetchWithRefreshClient(
-        `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/${chatId}/invite`,
+        `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/invite/${chatId}/members`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
