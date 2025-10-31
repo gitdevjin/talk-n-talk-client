@@ -53,7 +53,6 @@ export const SocketProvider = ({ children, chats }: SocketProviderProps) => {
             console.log("📦 Joined room:", chat.id);
           }
         });
-
         setSocket(newSocket);
       });
 

@@ -25,12 +25,14 @@ export const ChatProvider = ({ children, initialDms, initialGroupChats }: ChatPr
   const [groupChats, setGroupChats] = useState(initialGroupChats);
 
   useEffect(() => {
-    if (!socket) return;
+    console.log("before render!");
+    if (!socket || !socket.connected) return;
+    console.log("there is socket!");
 
     const handleInvite = async ({ roomId, inviter }: { roomId: string; inviter: User }) => {
-      console.log(`Invited to ${roomId} by ${inviter}`);
+      console.log(`Invited to ${roomId} by ${inviter}`); // update this with pop up message or something
       const groupChats = await fetchWithRefreshClient(
-        `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats`,
+        `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/group`,
         {
           method: "GET",
           credentials: "include",

@@ -30,10 +30,7 @@ export default function InviteFriendModal({ isOpen, onClose, chatId }: InviteFri
           `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/invite/${chatId}/members`
         );
 
-        console.log(chatId);
-
         console.log(data);
-        // Server can mark which friends are already in the chat or invited
         setFriends(data);
       } catch (err) {
         console.error("Failed to fetch friends:", err);
@@ -54,7 +51,7 @@ export default function InviteFriendModal({ isOpen, onClose, chatId }: InviteFri
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId: friendId }),
+          body: JSON.stringify({ memberIds: [friendId] }),
         }
       );
 
