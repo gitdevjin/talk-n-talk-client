@@ -28,11 +28,12 @@ export default function IncomingRequest() {
 
   const handleAccept = async (requestId: string) => {
     await fetchWithRefreshClient(
-      `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/friends/requests/accept`,
+      `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/friends/requests/${requestId}`,
       {
-        method: "POST",
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ requestId }),
+        credentials: "include",
+        body: JSON.stringify({ status: "accepted" }),
       }
     );
 
@@ -41,11 +42,12 @@ export default function IncomingRequest() {
 
   const handleDecline = async (requestId: string) => {
     await fetchWithRefreshClient(
-      `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/friends/decline`,
+      `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/friends/requests/${requestId}`,
       {
-        method: "POST",
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ requestId }),
+        credentials: "include",
+        body: JSON.stringify({ status: "declined" }),
       }
     );
 
@@ -69,24 +71,30 @@ export default function IncomingRequest() {
               <div className="w-8 h-8 bg-gray-500 rounded-full flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
                 {req.requester.username[0].toUpperCase()}
               </div>
-              <span className="text-sm text-white">{req.requester.username}</span>
+              <span className="text-sm text-white hover:cursor-pointer">
+                {req.requester.username}
+              </span>
             </div>
 
-            {/* Buttons */}
-            <div className="flex gap-2">
-              <button
-                onClick={() => handleAccept(req.id)}
-                className="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded-md"
-              >
-                Accept
-              </button>
-              <button
-                onClick={() => handleDecline(req.id)}
-                className="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-1 rounded-md"
-              >
-                Decline
-              </button>
-            </div>
+            {/* Buttons or status */}
+            {req.status === "declined" ? (
+              <span className="text-xs text-red-400 font-medium">Declined</span>
+            ) : (
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleAccept(req.id)}
+                  className="text-xs bg-blue-600 hover:bg-blue-500 hover:cursor-pointer text-white px-3 py-1 rounded-md"
+                >
+                  Accept
+                </button>
+                <button
+                  onClick={() => handleDecline(req.id)}
+                  className="text-xs bg-gray-700 hover:bg-gray-600 hover:cursor-pointer text-gray-300 px-3 py-1 rounded-md"
+                >
+                  Decline
+                </button>
+              </div>
+            )}
           </div>
         ))
       )}

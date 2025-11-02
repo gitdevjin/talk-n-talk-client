@@ -29,11 +29,13 @@ export default function OutgoingRequest() {
   }, []);
 
   const handleCancel = async (requestId: string) => {
-    await fetchWithRefreshClient(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/friends/cancel`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ requestId }),
-    });
+    await fetchWithRefreshClient(
+      `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/friends/requests/${requestId}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    );
 
     setRequests((prev) => prev.filter((r) => r.id !== requestId));
   };
