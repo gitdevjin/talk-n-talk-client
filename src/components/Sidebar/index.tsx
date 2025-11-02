@@ -46,12 +46,6 @@ export default function Sidebar() {
         </div>
       </div>
 
-      <div>
-        <button className="p-2 text-red-500 hover:underline" onClick={logout}>
-          Logout
-        </button>
-        <div className="font-semibold">{user.username}</div>
-      </div>
       {/* Modal */}
       <CreateGroupChatModal isOpen={showModal} onClose={() => setShowModal(false)} />
     </div>
