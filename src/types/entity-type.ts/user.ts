@@ -2,6 +2,7 @@ export interface User {
   id: string;
   email: string;
   username: string;
+  profile: Profile;
 }
 
 export interface Chat {
@@ -40,4 +41,10 @@ export interface Message {
   type: string;
   createdAt: string;
   sender: User | null;
+}
+
+export interface Profile {
+  name: string;
+  bio?: string;
+  avatar?: string;
 }

@@ -128,7 +128,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     try {
-      await fetch("http://localhost:3000/auth/logout", {
+      await fetch(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/auth/logout`, {
         method: "POST",
         credentials: "include",
       });

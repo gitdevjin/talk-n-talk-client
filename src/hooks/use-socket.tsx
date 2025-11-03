@@ -39,7 +39,7 @@ export const SocketProvider = ({ children, chats }: SocketProviderProps) => {
   // Initialize socket
   useEffect(() => {
     const timer = setTimeout(() => {
-      const newSocket = io("http://localhost:3000/chats", {
+      const newSocket = io(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats`, {
         withCredentials: true,
       });
 

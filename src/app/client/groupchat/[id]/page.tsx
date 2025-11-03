@@ -68,57 +68,54 @@ export default function GroupChatPage() {
   if (loading) return <div>Loading messages...</div>;
 
   return (
-    <div className="flex flex-1 flex-col justify-between">
+    <div className="flex flex-col h-full w-full pr-2">
       {/* Header */}
       <div className="p-4 border-b">
-        <h2>
-          GroupChat Messages: {id} {}
-        </h2>
+        <h2>GroupChat Messages: {id}</h2>
       </div>
 
-      {messages.map((m) => {
-        const isSystem = !m.sender;
-
-        return (
-          <div
-            key={m.id}
-            className={`flex ${isSystem ? "justify-center" : "items-start gap-3 m-2"}`}
-          >
-            {isSystem ? (
-              <div className="text-gray-400 text-sm italic px-2 py-1 bg-gray-700 rounded">
-                {m.content}
-              </div>
-            ) : (
-              <>
-                <div className="w-8 h-8 bg-gray-500 rounded-full flex items-center justify-center text-white font-semibold flex-shrink-0">
-                  {m.sender!.username[0].toUpperCase()}
+      {/* Messages container */}
+      <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
+        {messages.map((m) => {
+          const isSystem = !m.sender;
+          return (
+            <div key={m.id} className={`flex ${isSystem ? "justify-center" : "items-start gap-3"}`}>
+              {isSystem ? (
+                <div className="text-gray-400 text-sm italic px-2 py-1 bg-gray-700 rounded">
+                  {m.content}
                 </div>
-                <div className="flex flex-col">
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold text-blue-900 text-lg">
-                      {m.sender!.username}
-                    </span>
-                    <span className="text-gray-200 text-xs">
-                      {new Date(m.createdAt).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </span>
+              ) : (
+                <>
+                  <div className="w-8 h-8 bg-gray-500 rounded-full flex items-center justify-center text-white font-semibold flex-shrink-0">
+                    {m.sender!.username[0].toUpperCase()}
                   </div>
-                  <div className="hover:bg-[var(--color-darkgrey-3)] text-gray-900 text-lg p-2 rounded-lg max-w-md min-w-[40px] break-words">
-                    {m.content}
+                  <div className="flex flex-col max-w-md">
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-blue-900 text-sm">
+                        {m.sender!.username}
+                      </span>
+                      <span className="text-gray-500 text-xs">
+                        {new Date(m.createdAt).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    </div>
+                    <div className="hover:bg-[var(--color-darkgrey-3)] text-gray-900 text-lg p-2 rounded-lg break-words">
+                      {m.content}
+                    </div>
                   </div>
-                </div>
-              </>
-            )}
-          </div>
-        );
-      })}
+                </>
+              )}
+            </div>
+          );
+        })}
+      </div>
 
-      {/* Input */}
-      <div className="p-2 border-t flex h-15">
+      {/* Input bar */}
+      <div className="p-2 border-t flex gap-2">
         <input
-          className="flex-1 border rounded p-2 mr-2"
+          className="flex-1 border rounded p-2"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type a message..."

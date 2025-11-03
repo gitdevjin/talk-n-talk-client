@@ -3,7 +3,7 @@
 import { useUser } from "@/hooks/use-user";
 
 export default function UserBar() {
-  const { user } = useUser();
+  const { user, logout } = useUser();
 
   const onLogout = () => {};
 
@@ -13,14 +13,9 @@ export default function UserBar() {
 
   return (
     <div
-      className="
-        absolute bottom-3 left-[-70px] right-3 z-10
-        flex items-center justify-between
-        bg-[var(--color-darkgrey-3)]/95 backdrop-blur-sm
-        border border-[var(--color-darkgrey-2)] rounded-lg
-        px-3 py-2 shadow-md
-        hover:bg-[var(--color-darkgrey-2)] transition
-      "
+      className="absolute bottom-3 left-[-70px] right-3 z-10 flex items-center justify-between
+        bg-[var(--color-darkgrey-3)]/95 backdrop-blur-sm border border-[var(--color-darkgrey-2)] rounded-lg
+        px-3 py-2 shadow-md hover:bg-[var(--color-darkgrey-2)] transition"
     >
       {/* Left side: avatar + username */}
       <div className="flex items-center gap-3">
@@ -35,11 +30,9 @@ export default function UserBar() {
 
       {/* Logout button */}
       <button
-        onClick={onLogout}
-        className="
-          text-gray-400 hover:text-red-500
-          text-sm font-semibold
-          transition
+        onClick={logout}
+        className="text-gray-400 hover:text-red-500 hover:cursor-pointer
+          text-sm font-semibold transition
         "
       >
         ⎋
