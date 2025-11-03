@@ -25,9 +25,7 @@ export const ChatProvider = ({ children, initialDms, initialGroupChats }: ChatPr
   const [groupChats, setGroupChats] = useState(initialGroupChats);
 
   useEffect(() => {
-    console.log("before render!");
     if (!socket || !socket.connected) return;
-    console.log("there is socket!");
 
     const handleInvite = async ({ roomId, inviter }: { roomId: string; inviter: User }) => {
       console.log(`Invited to ${roomId} by ${inviter}`); // update this with pop up message or something
@@ -43,9 +41,24 @@ export const ChatProvider = ({ children, initialDms, initialGroupChats }: ChatPr
       joinRoom(roomId);
     };
 
-    socket.on("chatroom:invited", handleInvite);
+    const handleDirectMessage = async ({ roomId, inviter }: { roomId: string; inviter: User }) => {
+      console.log(`Invited to ${roomId} by ${inviter}`);
+      const directMessages = await fetchWithRefreshClient(
+        `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/dms`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
 
-    // ✅ wrap in arrow so return type is void
+      setDms(directMessages);
+      joinRoom(roomId);
+    };
+
+    socket.on("chatroom:invited", handleInvite);
+    socket.on("dm:invited", handleDirectMessage);
+
+    // wrap in arrow so return type is void
     return () => {
       socket.off("chatroom:invited", handleInvite);
     };

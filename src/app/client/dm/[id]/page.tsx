@@ -5,6 +5,7 @@ import { useUser } from "@/hooks/use-user";
 import { fetchWithRefreshClient } from "@/lib/client-api";
 import { Message } from "@/types/entity-type.ts/user";
 import { useParams } from "next/navigation";
+
 import { MouseEventHandler, useEffect, useState } from "react";
 
 export default function DmPage() {
