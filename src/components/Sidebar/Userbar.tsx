@@ -18,7 +18,7 @@ export default function UserBar() {
         px-2 py-1 shadow-md "
     >
       {/* Left side: avatar + username */}
-      <div className="flex items-center gap-3 hover:bg-[var(--color-darkgrey-2)] hover:cursor-pointer rounded-lg p-2 transition">
+      <div className="flex items-center gap-3 hover:bg-[var(--color-darkgrey-2)] hover:cursor-pointer rounded-lg p-2 pr-4 transition">
         <div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center font-semibold text-white text-sm">
           {user.username[0].toUpperCase()}
         </div>

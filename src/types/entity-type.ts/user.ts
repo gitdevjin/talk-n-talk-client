@@ -46,5 +46,5 @@ export interface Message {
 export interface Profile {
   name: string;
   bio?: string;
-  avatar?: string;
+  avatarUrl?: string;
 }
