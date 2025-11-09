@@ -1,8 +1,6 @@
 import GroupChatLeftPane from "@/components/GroupChat/GroupChatLeftPane";
-console.log("GroupChatLeftPane import:", GroupChatLeftPane);
 import TwoPaneLayout from "@/components/Layouts/TwoPaneLayout";
 import { getGroupChatMembers } from "@/lib/api";
-
 import { ReactNode } from "react";
 
 interface GroupChatLayoutProps {

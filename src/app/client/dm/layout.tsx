@@ -4,8 +4,7 @@ import TwoPaneLayout from "@/components/Layouts/TwoPaneLayout";
 import { useChat } from "@/hooks/use-chat";
 import { useUser } from "@/hooks/use-user";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 
 // to-do`s in this page
 // make this page as layout
@@ -28,7 +27,10 @@ export default function DmLayout({ children }: { children: ReactNode }) {
   });
 
   const left = (
-    <div className="flex flex-col h-full w-full bg-[var(--color-darkgrey-1)] text-gray-200 border-r border-[var(--color-darkgrey)]">
+    <div
+      className="flex flex-col h-full w-full bg-[var(--color-darkgrey-1)] 
+    text-gray-200 border-r border-[var(--color-darkgrey)]"
+    >
       {/* --- Header/Menu Section --- */}
       <div className="flex flex-col gap-2 p-3 border-b border-[var(--color-darkgrey)]">
         <div className="font-bold text-lg text-white mb-2">Direct Messages</div>

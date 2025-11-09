@@ -2,11 +2,16 @@ import { ReactNode } from "react";
 
 export default async function AuthLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-col bg-gray-50 text-black h-screen">
-      <div className="flex p-10 m-10 justify-center items-center h-20 text-gray-900 text-5xl">
-        Talk & Talk
-      </div>
-      <div>{children}</div>
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-100 to-gray-50 text-gray-900">
+      {/* Header */}
+      <header className="flex justify-center items-center py-12">
+        <h1 className="text-5xl font-extrabold tracking-tight text-gray-900">Talk & Talk</h1>
+      </header>
+
+      {/* Children container */}
+      <main className="flex flex-col flex-grow items-center justify-start pt-6 px-4">
+        {children}
+      </main>
     </div>
   );
 }

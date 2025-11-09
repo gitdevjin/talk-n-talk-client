@@ -16,6 +16,7 @@ export default function DmPage() {
   const [loading, setLoading] = useState(true);
 
   const [newMessage, setNewMessage] = useState<string>("");
+  console.log("test log");
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -46,13 +47,7 @@ export default function DmPage() {
       if (msg.roomId === id) setMessages((prev) => [...prev, msg]);
     };
 
-    if (socket.connected) {
-      socket.on("receiveMessage", handleMessage);
-    } else {
-      socket.once("connect", () => {
-        socket.on("receiveMessage", handleMessage);
-      });
-    }
+    socket.on("receiveMessage", handleMessage);
 
     return () => {
       socket.off("receiveMessage", handleMessage);
@@ -60,7 +55,6 @@ export default function DmPage() {
   }, [socket, id]);
 
   const sendMessage = () => {
-    console.log(socket);
     if (!socket) return;
     if (!newMessage.trim()) return;
 
@@ -74,13 +68,12 @@ export default function DmPage() {
   return (
     <div className="flex flex-1 flex-col">
       {/* Header */}
-      <div className="p-4 border-b w-full">
+      <div className="p-3 border-b w-full">
         <h2>Direct Messages: {id}</h2>
       </div>
 
       {/* Messages box */}
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
+      <div className="flex flex-col flex-1 overflow-y-auto p-4 gap-4">
         {messages.map((m) => {
           const isSystem = !m.senderId;
           const isMe = m.senderId === currentUser.id;

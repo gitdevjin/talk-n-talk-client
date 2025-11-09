@@ -13,6 +13,7 @@ export default function GroupChatPage() {
   const [loading, setLoading] = useState(true);
 
   const [newMessage, setNewMessage] = useState<string>("");
+
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -20,7 +21,7 @@ export default function GroupChatPage() {
           `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/${id}/messages`,
           {
             method: "GET",
-            credentials: "include", // include cookies automatically
+            credentials: "include",
           }
         );
 
@@ -56,13 +57,10 @@ export default function GroupChatPage() {
   }, [socket, id]);
 
   const sendMessage = () => {
-    console.log(socket);
-    console.log(newMessage);
-
     if (!socket) return;
 
     socket.emit("sendMessage", { roomId: id, content: newMessage });
-    setNewMessage(""); // clear
+    setNewMessage(""); // clear MessageInput
   };
 
   if (loading) return <div>Loading messages...</div>;

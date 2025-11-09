@@ -1,11 +1,10 @@
 "use client";
 import { useUser } from "@/hooks/use-user";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function LoginPage() {
-  const { login, user } = useUser();
+  const { login } = useUser();
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,7 +18,6 @@ export default function LoginPage() {
 
     try {
       await login(email, password); // context handles token + user
-      console.log(user);
       router.push("/client/dm/friend");
     } catch (err) {
       setError(`Login Failed: ${err}`);

@@ -61,12 +61,16 @@ export default function OutgoingRequest() {
             </div>
 
             {/* Cancel button */}
-            <button
-              onClick={() => handleCancel(req.id)}
-              className="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-1 rounded-md"
-            >
-              Cancel
-            </button>
+            {req.status === "declined" ? (
+              <span className="text-xs text-red-400 font-medium">Declined</span>
+            ) : (
+              <button
+                onClick={() => handleCancel(req.id)}
+                className="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-1 rounded-md"
+              >
+                Cancel
+              </button>
+            )}
           </div>
         ))
       )}
