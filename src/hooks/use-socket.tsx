@@ -45,15 +45,6 @@ export const SocketProvider = ({ children, chats }: SocketProviderProps) => {
 
       newSocket.on("connect", () => {
         console.log("Socket connected with id:", newSocket.id);
-
-        chats.forEach((chat) => {
-          if (!joinedRoomsRef.current.includes(chat.id)) {
-            newSocket.emit("joinRoom", { roomId: chat.id });
-            joinedRoomsRef.current.push(chat.id);
-            console.log("📦 Joined room:", chat.id);
-          }
-        });
-        setSocket(newSocket);
       });
 
       newSocket.on("receiveMessage", (msg: SocketMessage) => {
@@ -81,6 +72,8 @@ export const SocketProvider = ({ children, chats }: SocketProviderProps) => {
         }
       });
 
+      setSocket(newSocket);
+
       return () => {
         newSocket.disconnect();
         setSocket(null);
@@ -90,6 +83,18 @@ export const SocketProvider = ({ children, chats }: SocketProviderProps) => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    chats.forEach((chat) => {
+      if (!joinedRoomsRef.current.includes(chat.id)) {
+        socket.emit("joinRoom", { roomId: chat.id });
+        joinedRoomsRef.current.push(chat.id);
+        console.log("📦 Joined room:", chat.id);
+      }
+    });
+  }, [socket, chats]);
 
   // Reset unread count for a room
   const resetUnread = (roomId: string) => {
