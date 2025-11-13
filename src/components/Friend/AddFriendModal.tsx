@@ -30,8 +30,6 @@ export default function AddFriendModal({ isOpen, onClose }: AddFriendModalProps)
         `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/search?username=${search}`
       );
 
-      console.log(data);
-
       setResults(data);
     } catch (err) {
       console.error(err);
@@ -43,6 +41,7 @@ export default function AddFriendModal({ isOpen, onClose }: AddFriendModalProps)
   // --- Send friend request ---
   const handleAddFriend = async (userId: string) => {
     setLoading(true);
+
     try {
       await fetchWithRefreshClient(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/friends`, {
         method: "POST",
@@ -105,7 +104,7 @@ export default function AddFriendModal({ isOpen, onClose }: AddFriendModalProps)
                       {loading ? "..." : "Add"}
                     </button>
                   ) : status === "pending" ? (
-                    <span className="text-gray-400 text-sm italic">Request Sent</span>
+                    <span className="text-gray-200 text-sm italic">Request Sent</span>
                   ) : status === "accepted" ? (
                     <span className="text-green-700 text-sm italic">Friends</span>
                   ) : status === "blocked" ? (

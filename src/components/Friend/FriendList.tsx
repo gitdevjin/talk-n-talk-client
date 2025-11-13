@@ -5,7 +5,6 @@ import { User } from "@/types/entity-type.ts/user";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import FriendProfileModal from "./FriendProfileModal";
-import { div } from "framer-motion/client";
 
 export default function FriendList() {
   const router = useRouter();
@@ -49,7 +48,7 @@ export default function FriendList() {
   };
 
   const deleteFriend = async (friendId: string) => {
-    if (window.confirm("Are yuo sure you want to delete ")) {
+    if (window.confirm("Are you sure you want to delete your friend?")) {
       const res = await fetchWithRefreshClient(
         `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/friends/${friendId}`,
         {
@@ -84,7 +83,7 @@ export default function FriendList() {
               className="flex items-center gap-3 overflow-hidden"
             >
               {/* Avatar circle */}
-              <div className="w-9 h-9 bg-gray-600  rounded-full flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
+              <div className="w-9 h-9 bg-gray-600 rounded-full flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
                 {f.username[0].toUpperCase()}
               </div>
 

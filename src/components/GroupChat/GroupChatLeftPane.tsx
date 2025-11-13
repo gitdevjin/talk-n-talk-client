@@ -2,6 +2,7 @@
 "use client";
 
 import InviteFriendModal from "@/components/GroupChat/InviteFriendModal";
+import { fetchWithRefreshClient } from "@/lib/client-api";
 import { useState } from "react";
 
 interface GroupChatLeftPaneProps {
@@ -13,8 +14,15 @@ export default function GroupChatLeftPane({ chatId, initialMembers }: GroupChatL
   const [showModal, setShowModal] = useState(false);
   const [members, setMembers] = useState(initialMembers);
 
-  const handleInviteSuccess = (newMember: any) => {
-    setMembers((prev) => [...prev, newMember]);
+  const fetchMembers = async () => {
+    try {
+      const data = await fetchWithRefreshClient(
+        `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/group/${chatId}/members`
+      );
+      setMembers(data);
+    } catch (err) {
+      console.error("Failed to fetch members:", err);
+    }
   };
 
   return (
@@ -45,7 +53,12 @@ export default function GroupChatLeftPane({ chatId, initialMembers }: GroupChatL
         ))}
       </div>
 
-      <InviteFriendModal chatId={chatId} isOpen={showModal} onClose={() => setShowModal(false)} />
+      <InviteFriendModal
+        chatId={chatId}
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        refreshMembers={fetchMembers}
+      />
     </div>
   );
 }

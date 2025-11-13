@@ -29,15 +29,19 @@ export default function OutgoingRequest() {
   }, []);
 
   const handleCancel = async (requestId: string) => {
-    await fetchWithRefreshClient(
-      `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/friends/requests/${requestId}`,
-      {
-        method: "DELETE",
-        credentials: "include",
-      }
-    );
+    try {
+      await fetchWithRefreshClient(
+        `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/friends/requests/${requestId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
 
-    setRequests((prev) => prev.filter((r) => r.id !== requestId));
+      setRequests((prev) => prev.filter((r) => r.id !== requestId));
+    } catch (error) {
+      console.error("Failed to cancel request:", error);
+    }
   };
 
   return (

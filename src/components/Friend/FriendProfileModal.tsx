@@ -30,7 +30,7 @@ export default function FriendProfileModal({
       <div>
         {/* Background overlay */}
         <motion.div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
           onClick={onClose}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -45,13 +45,13 @@ export default function FriendProfileModal({
           exit={{ opacity: 0, scale: 0.9 }}
         >
           {/* Header banner */}
-          <div className="relative h-24 bg-gradient-to-r from-indigo-500 to-purple-600">
+          <div className="relative h-24 bg-gradient-to-r from-indigo-400 to-purple-500">
             <Image
               src={user.profile?.avatarUrl || "/icons/default-avatar.png"}
               alt={`${user.username}'s avatar`}
               width={80}
               height={80}
-              className="rounded-full border-4 border-[#1e1f22] absolute bottom-0 left-6 translate-y-1/2"
+              className="rounded-full border-1 border-[#1e1f22] absolute bottom-0 left-6 translate-y-1/2"
             />
           </div>
 

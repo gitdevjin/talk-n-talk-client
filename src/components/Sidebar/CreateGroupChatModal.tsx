@@ -48,7 +48,7 @@ export default function CreateGroupModal({ isOpen, onClose }: CreateGroupModalPr
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-opacity-10">
+    <div className="fixed inset-0 flex items-center justify-center bg-opacity-10 z-20">
       <div className="bg-[var(--color-darkgrey)] p-6 rounded-xl shadow-lg w-80">
         <h2 className="text-xl font-bold mb-4">Create Group Chat</h2>
 

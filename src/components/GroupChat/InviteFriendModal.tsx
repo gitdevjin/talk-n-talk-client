@@ -1,12 +1,14 @@
 "use client";
 
 import { fetchWithRefreshClient } from "@/lib/client-api";
+import { User } from "@/types/entity-type.ts/user";
 import { useEffect, useState } from "react";
 
 interface InviteFriendModalProps {
   isOpen: boolean;
   onClose: () => void;
   chatId: string;
+  refreshMembers: () => void;
 }
 
 interface Friend {
@@ -15,7 +17,12 @@ interface Friend {
   status: "in_chat" | "invited" | "available";
 }
 
-export default function InviteFriendModal({ isOpen, onClose, chatId }: InviteFriendModalProps) {
+export default function InviteFriendModal({
+  isOpen,
+  onClose,
+  chatId,
+  refreshMembers,
+}: InviteFriendModalProps) {
   const [friends, setFriends] = useState<Friend[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
@@ -57,6 +64,8 @@ export default function InviteFriendModal({ isOpen, onClose, chatId }: InviteFri
 
       // update UI to show invited
       setFriends((prev) => prev.map((f) => (f.id === friendId ? { ...f, status: "invited" } : f)));
+
+      refreshMembers();
     } catch (err) {
       console.error("Failed to invite friend:", err);
     } finally {

@@ -52,6 +52,7 @@ export default function GroupChatPage() {
     socket.on("receiveMessage", handleMessage);
 
     return () => {
+      socket.off("chatroom:system", handleSystemMessage);
       socket.off("receiveMessage", handleMessage);
     };
   }, [socket, id]);
