@@ -1,6 +1,5 @@
 "use client";
 
-import { useUser } from "@/hooks/use-user";
 import { useState, useRef } from "react";
 import UserBar from "../Sidebar/Userbar";
 
@@ -20,7 +19,6 @@ export default function TwoPaneLayout({
   minLeftWidth = 150,
   maxLeftWidth = 400,
 }: TwoPaneLayoutProps) {
-  const { user } = useUser();
   const [leftWidth, setLeftWidth] = useState(initialLeftWidth);
   const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);

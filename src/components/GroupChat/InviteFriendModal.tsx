@@ -37,7 +37,6 @@ export default function InviteFriendModal({
           `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/invite/${chatId}/members`
         );
 
-        console.log(data);
         setFriends(data);
       } catch (err) {
         console.error("Failed to fetch friends:", err);
@@ -91,7 +90,7 @@ export default function InviteFriendModal({
         />
 
         {/* Friends list */}
-        <div className="max-h-52 overflow-y-auto no-scrollbar">
+        <div className="max-h-56 overflow-y-auto no-scrollbar">
           {filtered.length > 0 ? (
             filtered.map((friend) => (
               <div
