@@ -41,7 +41,7 @@ export default function CreateGroupModal({ isOpen, onClose }: CreateGroupModalPr
       joinRoom(newGroupChat.id);
       onClose(); // close modal
     } catch (err) {
-      console.error("❌ Error creating group:", err);
+      console.error("Error creating groupChat:", err);
     } finally {
       setLoading(false);
     }

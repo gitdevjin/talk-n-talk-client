@@ -2,13 +2,12 @@
 
 import { useChat } from "@/hooks/use-chat";
 import { useUser } from "@/hooks/use-user";
-import { Chat, User } from "@/types/entity-type.ts/user";
 import Link from "next/link";
 import { useState } from "react";
 import CreateGroupChatModal from "./CreateGroupChatModal";
 
 export default function Sidebar() {
-  const { user, logout } = useUser();
+  const { user } = useUser();
   const { groupChats } = useChat();
   const [showModal, setShowModal] = useState(false);
 
@@ -24,6 +23,7 @@ export default function Sidebar() {
           </div>
         </Link>
 
+        {/* Create GroupChat Icon */}
         <button
           onClick={() => setShowModal(true)}
           className="bg-[var(--color-skyblue-1)] text-white rounded-lg w-12 py-2 hover:bg-blue-600 transition hover:cursor-pointer"
@@ -35,11 +35,15 @@ export default function Sidebar() {
         <div className="flex flex-col items-center gap-2">
           {groupChats.map((chat) => (
             <Link key={chat.id} href={`/client/groupchat/${chat.id}`}>
-              <div
-                className="w-12 h-12 bg-[var(--color-darkgrey-1)] rounded-full flex items-center justify-center text-sm font-medium text-gray-200 hover:bg-blue-600 cursor-pointer transition overflow-hidden"
-                title={chat.roomname}
-              >
-                {chat.roomname.length > 3 ? chat.roomname.slice(0, 3) + "…" : chat.roomname}
+              <div className="relative group">
+                <div className="w-12 h-12 bg-[var(--color-darkgrey-1)] rounded-full flex items-center justify-center text-sm font-medium text-gray-200 hover:bg-blue-600 cursor-pointer transition overflow-hidden">
+                  {chat.roomname.length > 3 ? chat.roomname.slice(0, 3) + "…" : chat.roomname}
+                </div>
+
+                {/* Tooltip */}
+                <div className="absolute left-[3rem] bottom-[1rem] px-2 py-1 bg-[var(--color-darkgrey)] text-white text-xs rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none z-10 border-1 border-gray-500">
+                  {chat.roomname}
+                </div>
               </div>
             </Link>
           ))}
