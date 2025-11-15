@@ -8,7 +8,6 @@ import Image from "next/image";
 export default function UserBar() {
   const { user, logout } = useUser();
   const [open, setOpen] = useState(false);
-  const anchorRef = useRef<HTMLDivElement | null>(null);
   const barRef = useRef<HTMLDivElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
 
@@ -76,10 +75,15 @@ export default function UserBar() {
 
               {/* Body */}
               <div className="px-8 pt-10 pb-6 space-y-4">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col gap-1">
                   <h2 className="text-xl font-semibold">{user.username}</h2>
-                  <span className="text-sm text-gray-400">{user.profile?.name}</span>
-                  <span className="ml-2 w-3 h-3 rounded-full bg-green-400" />
+                  <div>
+                    <span className="text-md text-gray-300">
+                      {user.profile?.name}{" "}
+                      <span className="text-gray-400">#{user.id.slice(0, 6)}</span>
+                    </span>
+                    <span className="ml-2 w-3 h-3 rounded-full bg-green-400" />
+                  </div>
                 </div>
 
                 <p className="text-sm text-gray-300">{user.profile?.bio || "No bio"}</p>

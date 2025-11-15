@@ -4,6 +4,8 @@
 import InviteFriendModal from "@/components/GroupChat/InviteFriendModal";
 import { fetchWithRefreshClient } from "@/lib/client-api";
 import { useState } from "react";
+import FriendProfileModal from "../Friend/FriendProfileModal";
+import { User } from "@/types/entity-type.ts/user";
 
 interface GroupChatLeftPaneProps {
   chatId: string;
@@ -12,6 +14,7 @@ interface GroupChatLeftPaneProps {
 
 export default function GroupChatLeftPane({ chatId, initialMembers }: GroupChatLeftPaneProps) {
   const [showModal, setShowModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [members, setMembers] = useState(initialMembers);
 
   const fetchMembers = async () => {
@@ -44,6 +47,7 @@ export default function GroupChatLeftPane({ chatId, initialMembers }: GroupChatL
           <div
             key={m.id}
             className="flex items-center gap-2 px-3 py-2 hover:bg-[var(--color-darkgrey)] hover:cursor-pointer rounded"
+            onClick={() => setSelectedUser(m.user)}
           >
             <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center text-white">
               {m.user.username[0].toUpperCase()}
@@ -59,6 +63,10 @@ export default function GroupChatLeftPane({ chatId, initialMembers }: GroupChatL
         onClose={() => setShowModal(false)}
         refreshMembers={fetchMembers}
       />
+
+      {selectedUser && (
+        <FriendProfileModal user={selectedUser} onClose={() => setSelectedUser(null)} />
+      )}
     </div>
   );
 }

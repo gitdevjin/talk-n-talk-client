@@ -4,18 +4,17 @@ import { useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { User } from "@/types/entity-type.ts/user";
+import { createDm } from "@/lib/dm";
+import { useRouter } from "next/navigation";
 
 interface FriendProfileModalProps {
   onClose: () => void;
   user: User;
-  onClickMessage: (friendId: string) => void;
 }
 
-export default function FriendProfileModal({
-  user,
-  onClose,
-  onClickMessage,
-}: FriendProfileModalProps) {
+export default function FriendProfileModal({ user, onClose }: FriendProfileModalProps) {
+  const router = useRouter();
+
   // close when pressing ESC
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -24,6 +23,19 @@ export default function FriendProfileModal({
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, [onClose]);
+
+  const handleClickMessage = async (friendId: string) => {
+    console.log(friendId);
+    try {
+      const data = await createDm(friendId);
+
+      if (data.status === "success") {
+        router.push(`/client/dm/${data.dm.id}`);
+      }
+    } catch (e) {
+      console.error("Failed to create or open DM", e);
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -71,7 +83,7 @@ export default function FriendProfileModal({
 
             <div className="flex gap-2 pt-4">
               <button
-                onClick={() => onClickMessage(user.id)}
+                onClick={() => handleClickMessage(user.id)}
                 className="flex-1 bg-indigo-600 hover:bg-indigo-700 transition rounded-lg py-2 text-sm font-medium"
               >
                 Message

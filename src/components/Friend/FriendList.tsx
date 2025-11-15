@@ -5,6 +5,7 @@ import { User } from "@/types/entity-type.ts/user";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import FriendProfileModal from "./FriendProfileModal";
+import { createDm } from "@/lib/dm";
 
 export default function FriendList() {
   const router = useRouter();
@@ -29,15 +30,9 @@ export default function FriendList() {
     fetchFriends();
   }, []);
 
-  const createDm = async (friendId: string) => {
+  const handleClickMessage = async (friendId: string) => {
     try {
-      const data = await fetchWithRefreshClient(
-        `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/chats/dms/${friendId}`,
-        {
-          method: "POST",
-          credentials: "include",
-        }
-      );
+      const data = await createDm(friendId);
 
       if (data.status === "success") {
         router.push(`/client/dm/${data.dm.id}`); // include dmId in backend response
@@ -70,11 +65,7 @@ export default function FriendList() {
         <div key={f.id}>
           {" "}
           {selectedUser && (
-            <FriendProfileModal
-              user={selectedUser}
-              onClose={() => setSelectedUser(null)}
-              onClickMessage={createDm}
-            />
+            <FriendProfileModal user={selectedUser} onClose={() => setSelectedUser(null)} />
           )}
           <div className="group flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[var(--color-darkgrey-1)] transition">
             {/* Left: Avatar + Username */}
@@ -94,7 +85,7 @@ export default function FriendList() {
             {/* Right: Message button (appears on hover) */}
             <div className="flex flex-row gap-2">
               <button
-                onClick={() => createDm(f.id)}
+                onClick={() => handleClickMessage(f.id)}
                 className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:cursor-pointer
                    text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded-md"
               >
