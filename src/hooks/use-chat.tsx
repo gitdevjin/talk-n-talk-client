@@ -61,8 +61,9 @@ export const ChatProvider = ({ children, initialDms, initialGroupChats }: ChatPr
     // wrap in arrow so return type is void
     return () => {
       socket.off("chatroom:invited", handleInvite);
+      socket.off("dm:invited", handleDirectMessage);
     };
-  }, [socket]);
+  }, [socket, socket?.connected]);
   return (
     <ChatContext.Provider value={{ dms, setDms, groupChats, setGroupChats }}>
       {children}

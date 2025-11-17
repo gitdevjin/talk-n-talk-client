@@ -2,7 +2,6 @@
 import { Chat } from "@/types/entity-type.ts/user";
 import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { useUser } from "./use-user";
 
 interface SocketContextType {
   socket: Socket | null;
@@ -31,7 +30,6 @@ const SocketContext = createContext<SocketContextType>({
 });
 
 export const SocketProvider = ({ children, chats }: SocketProviderProps) => {
-  const { user } = useUser();
   const [socket, setSocket] = useState<Socket | null>(null);
   const joinedRoomsRef = useRef<string[]>([]);
   const [unreads, setUnreads] = useState<Record<string, number>>({});
@@ -44,10 +42,21 @@ export const SocketProvider = ({ children, chats }: SocketProviderProps) => {
       });
 
       newSocket.on("connect", () => {
+        newSocket.emit("joinRoom", { roomId: "errorProof" });
+        chats.forEach((chat) => {
+          if (!joinedRoomsRef.current.includes(chat.id)) {
+            newSocket.emit("joinRoom", { roomId: chat.id });
+            joinedRoomsRef.current.push(chat.id);
+            console.log("📦 Joined room:", chat.id);
+          }
+        });
         console.log("Socket connected with id:", newSocket.id);
       });
 
       newSocket.on("receiveMessage", (msg: SocketMessage) => {
+        const currentRoomId = window.location.pathname.split("/").pop();
+        if (currentRoomId === msg.roomId) return;
+
         setUnreads((prev) => ({
           ...prev,
           [msg.roomId]: (prev[msg.roomId] || 0) + 1,
@@ -83,18 +92,6 @@ export const SocketProvider = ({ children, chats }: SocketProviderProps) => {
 
     return () => clearTimeout(timer);
   }, []);
-
-  useEffect(() => {
-    if (!socket) return;
-
-    chats.forEach((chat) => {
-      if (!joinedRoomsRef.current.includes(chat.id)) {
-        socket.emit("joinRoom", { roomId: chat.id });
-        joinedRoomsRef.current.push(chat.id);
-        console.log("📦 Joined room:", chat.id);
-      }
-    });
-  }, [socket, chats]);
 
   // Reset unread count for a room
   const resetUnread = (roomId: string) => {

@@ -5,8 +5,10 @@ import { useUser } from "@/hooks/use-user";
 import Link from "next/link";
 import { useState } from "react";
 import CreateGroupChatModal from "./CreateGroupChatModal";
+import { useSocket } from "@/hooks/use-socket";
 
 export default function Sidebar() {
+  const { unreads } = useSocket();
   const { user } = useUser();
   const { groupChats } = useChat();
   const [showModal, setShowModal] = useState(false);
@@ -43,6 +45,13 @@ export default function Sidebar() {
                 {/* Tooltip */}
                 <div className="absolute left-[3rem] bottom-[1rem] px-2 py-1 bg-[var(--color-darkgrey)] text-white text-xs rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none z-10 border-1 border-gray-500">
                   {chat.roomname}
+                </div>
+                <div className="absolute -top-1 -right-1">
+                  {unreads[chat.id] > 0 && (
+                    <div className="w-5 h-5 bg-red-600 rounded-full flex items-center justify-center text-white text-xs">
+                      {unreads[chat.id]}
+                    </div>
+                  )}
                 </div>
               </div>
             </Link>

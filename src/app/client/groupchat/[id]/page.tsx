@@ -8,7 +8,7 @@ import { MouseEventHandler, useEffect, useState } from "react";
 
 export default function GroupChatPage() {
   const { id } = useParams<{ id: string }>();
-  const { socket } = useSocket();
+  const { socket, resetUnread } = useSocket();
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,6 +26,7 @@ export default function GroupChatPage() {
         );
 
         setMessages(data);
+        resetUnread(id);
       } catch (err) {
         console.error(err);
       } finally {
