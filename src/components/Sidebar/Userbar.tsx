@@ -4,12 +4,14 @@ import { useState, useRef } from "react";
 import { useUser } from "@/hooks/use-user";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import EditProfileModal from "../Profile/EditProfileModal";
 
 export default function UserBar() {
   const { user, logout } = useUser();
   const [open, setOpen] = useState(false);
   const barRef = useRef<HTMLDivElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
+  const [displayEditProfile, setDisplayEditProfile] = useState(false);
 
   if (!user) return <div className="text-white">Loading...</div>;
 
@@ -35,6 +37,8 @@ export default function UserBar() {
       </div>
 
       {/* Modal / Dropdown above the bar */}
+      {displayEditProfile && <EditProfileModal onClose={() => setDisplayEditProfile(false)} />}
+
       {/* Popover / modal */}
       <AnimatePresence>
         {open && barRef.current && (
@@ -60,7 +64,7 @@ export default function UserBar() {
                 left: -70,
                 bottom: window.innerHeight - barRef.current.getBoundingClientRect().top + 10,
               }}
-              className="z-50 w-72 rounded-2xl overflow-hidden shadow-2xl bg-[#1e1f22] text-white"
+              className="z-50 w-84 rounded-2xl overflow-hidden shadow-2xl bg-[#1e1f22] text-white"
             >
               {/* Header banner */}
               <div className="relative h-24 bg-gradient-to-r from-indigo-400 to-purple-500">
@@ -89,15 +93,22 @@ export default function UserBar() {
                 <p className="text-sm text-gray-300">{user.profile?.bio || "No bio"}</p>
 
                 <div className="flex flex-col gap-2 pt-2">
-                  <button className="w-full text-left pl-4 bg-indigo-600 hover:bg-indigo-700 transition rounded-lg py-2 text-sm font-medium">
+                  <button
+                    onClick={() => {
+                      setOpen(false);
+                      setDisplayEditProfile(true);
+                    }}
+                    className="w-full text-left pl-4 bg-indigo-600 hover:bg-indigo-700 transition rounded-lg py-3 text-sm font-medium hover:cursor-pointer"
+                  >
                     Edit Profile
                   </button>
-                  <button className="w-full text-left pl-4 bg-gray-700 hover:bg-gray-600 transition rounded-lg py-2 text-sm font-medium">
+                  <button className="w-full text-left pl-4 bg-gray-700 hover:bg-gray-600 transition rounded-lg py-3 text-sm font-medium hover:cursor-pointer">
                     Settings
                   </button>
                   <button
                     onClick={logout}
-                    className="w-full text-right text-red-400 hover:text-red-500 transition rounded-lg py-2 text-sm font-medium"
+                    className="w-full text-right text-red-400 hover:text-red-500 transition rounded-lg py-2 text-sm
+                    font-medium hover:cursor-pointer"
                   >
                     Logout ⎋
                   </button>

@@ -1,5 +1,6 @@
 "use client";
 
+import { fetchWithRefreshClient } from "@/lib/client-api";
 import { User } from "@/types/entity-type.ts/user";
 import {
   createContext,
@@ -18,6 +19,7 @@ interface UserContextType {
   logout: () => Promise<void>;
   register: (email: string, password: string, username: string) => Promise<void>;
   loading: boolean;
+  refreshUser: () => void;
 }
 
 const userContext = createContext<UserContextType | undefined>(undefined);
@@ -47,9 +49,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
           });
 
           if (refreshRes.ok) {
-            const data = await refreshRes.json();
-            console.log(data.accessToken); // just to check if it works fine, this code should be deleted later
-
             const newUserRes = await fetch(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/me`, {
               method: "GET",
               credentials: "include",
@@ -77,7 +76,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const register = async (email: string, password: string, username: string) => {
-    console.log(email, password, username);
     const res = await fetch(`${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/auth/register/email`, {
       method: "POST",
       credentials: "include",
@@ -141,8 +139,24 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const refreshUser = async () => {
+    try {
+      const refreshedUser = await fetchWithRefreshClient(
+        `${process.env.NEXT_PUBLIC_TNT_SERVER_URL}/users/me`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      setUser(refreshedUser);
+    } catch (err) {
+      console.error("Failed to refresh user:", err);
+      setUser(null);
+    }
+  };
+
   return (
-    <userContext.Provider value={{ user, setUser, login, logout, register, loading }}>
+    <userContext.Provider value={{ user, setUser, login, logout, register, loading, refreshUser }}>
       {children}
     </userContext.Provider>
   );
