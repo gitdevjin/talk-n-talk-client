@@ -26,7 +26,7 @@ export default function EditProfileModal({ onClose }: EditProfileModalProps) {
           credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name, bio }),
-        }
+        },
       );
 
       console.log("updatedProfile)", data);
@@ -43,7 +43,7 @@ export default function EditProfileModal({ onClose }: EditProfileModalProps) {
       <>
         {/* Overlay */}
         <motion.div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
           onClick={onClose}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -52,21 +52,22 @@ export default function EditProfileModal({ onClose }: EditProfileModalProps) {
 
         {/* Modal panel */}
         <motion.div
-          className="fixed z-50 top-1/2 max-w-md left-1/2 w-full -translate-x-1/2 -translate-y-1/2 
-                       rounded-2xl bg-[#1e1f22] text-white shadow-2xl border border-white/10"
+          className="fixed top-1/2 left-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-white/10 bg-[#1e1f22] text-white shadow-2xl"
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
           transition={{ duration: 0.2 }}
         >
           {/* Header */}
-          <div className="p-6 border-b border-white/10">
+          <div className="border-b border-white/10 p-6">
             <h2 className="text-2xl font-semibold">Edit Profile</h2>
-            <p className="text-sm text-gray-400 mt-1">Update your profile information</p>
+            <p className="mt-1 text-sm text-gray-400">
+              Update your profile information
+            </p>
           </div>
 
           {/* Body */}
-          <div className="p-6 space-y-5">
+          <div className="space-y-5 p-6">
             {/* Avatar Row */}
             <div className="flex items-center gap-4">
               <Image
@@ -76,7 +77,7 @@ export default function EditProfileModal({ onClose }: EditProfileModalProps) {
                 height={64}
                 className="rounded-full"
               />
-              <button className="px-4 py-2 rounded-lg text-sm bg-gray-700 hover:bg-gray-600 transition">
+              <button className="rounded-lg bg-gray-700 px-4 py-2 text-sm transition hover:bg-gray-600">
                 Change Avatar
               </button>
             </div>
@@ -86,7 +87,7 @@ export default function EditProfileModal({ onClose }: EditProfileModalProps) {
               <label className="text-sm text-gray-300">Username</label>
               <input
                 disabled={true}
-                className="px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:ring focus:ring-indigo-500/50 text-gray-500"
+                className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-gray-500 focus:ring focus:ring-indigo-500/50 focus:outline-none"
                 defaultValue={user.username}
               />
             </div>
@@ -95,7 +96,7 @@ export default function EditProfileModal({ onClose }: EditProfileModalProps) {
             <div className="flex flex-col space-y-1">
               <label className="text-sm text-gray-300">Display Name</label>
               <input
-                className="px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:ring focus:ring-indigo-500/50"
+                className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 focus:ring focus:ring-indigo-500/50 focus:outline-none"
                 onChange={(e) => setName(e.target.value)}
                 defaultValue={user.profile?.name}
               />
@@ -105,7 +106,7 @@ export default function EditProfileModal({ onClose }: EditProfileModalProps) {
             <div className="flex flex-col space-y-1">
               <label className="text-sm text-gray-300">Bio</label>
               <textarea
-                className="px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 h-24 resize-none focus:outline-none focus:ring focus:ring-indigo-500/50"
+                className="h-24 resize-none rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 focus:ring focus:ring-indigo-500/50 focus:outline-none"
                 defaultValue={user.profile?.bio}
                 onChange={(e) => setBio(e.target.value)}
               />
@@ -113,17 +114,17 @@ export default function EditProfileModal({ onClose }: EditProfileModalProps) {
           </div>
 
           {/* Footer */}
-          <div className="p-4 border-t border-white/10 flex justify-end gap-3">
+          <div className="flex justify-end gap-3 border-t border-white/10 p-4">
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-lg text-sm bg-gray-700 hover:bg-gray-600 transition"
+              className="rounded-lg bg-gray-700 px-4 py-2 text-sm transition hover:bg-gray-600"
             >
               Cancel
             </button>
 
             <button
               onClick={handleUpdate}
-              className="px-4 py-2 rounded-lg text-sm bg-indigo-600 hover:bg-indigo-700 transition font-medium"
+              className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium transition hover:bg-indigo-700"
             >
               Update
             </button>
